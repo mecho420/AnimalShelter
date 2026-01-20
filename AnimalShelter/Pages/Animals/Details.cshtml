@@ -36,7 +36,8 @@
         <div class="mt-4">
             <a asp-page="/Animals/Index" class="btn btn-secondary">Назад</a>
 
-            @if (User.Identity?.IsAuthenticated ?? false)
+            @if ((User.Identity?.IsAuthenticated ?? false) &&
+            Model.Animal.Status == AnimalShelter.Models.Enums.AnimalStatus.ForAdoption)
             {
                 <a asp-page="/Adoptions/Create"
                    asp-route-animalId="@Model.Animal.Id"
