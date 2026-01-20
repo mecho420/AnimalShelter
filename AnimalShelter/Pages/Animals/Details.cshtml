@@ -1,5 +1,6 @@
 ﻿@page "{id:int}"
 @model AnimalShelter.Pages.Animals.DetailsModel
+@using AnimalShelter.Helpers
 
 @{
     ViewData["Title"] = "Детайли";
@@ -20,8 +21,8 @@
         <p>
             <strong>Вид:</strong> @Model.Animal.Species <br />
             <strong>Възраст:</strong> @Model.Animal.Age години <br />
-            <strong>Пол:</strong> @Model.Animal.Gender <br />
-            <strong>Статус:</strong> @Model.Animal.Status
+            <strong>Пол:</strong> @Model.Animal.Gender.GetDisplayName() <br />
+            <strong>Статус:</strong> @Model.Animal.Status.GetDisplayName()
         </p>
 
         <hr />
