@@ -1,0 +1,46 @@
+﻿@page
+@model AnimalShelter.Pages.Animals.IndexModel
+
+@{
+	ViewData["Title"] = "Животни за осиновяване";
+}
+
+<h1 class="mb-4">Животни за осиновяване</h1>
+
+<div class="row">
+    @if (!Model.Animals.Any())
+    {
+        <p>В момента няма налични животни.</p>
+    }
+    else
+    {
+        foreach (var animal in Model.Animals)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="@animal.ImagePath"
+                         class="card-img-top"
+                         alt="Снимка на @animal.Name"
+                         style="height: 200px; object-fit: cover;" />
+
+                    <div class="card-body">
+                        <h5 class="card-title">@animal.Name</h5>
+                        <p class="card-text">
+                            <strong>Вид:</strong> @animal.Species <br />
+                            <strong>Възраст:</strong> @animal.Age години
+                        </p>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        <a asp-page="/Animals/Details"
+                           asp-route-id="@animal.Id"
+                           class="btn btn-primary">
+                            Виж детайли
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
