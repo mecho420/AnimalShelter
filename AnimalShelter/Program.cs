@@ -21,6 +21,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 
 var app = builder.Build();
 
+await DbInitializer.SeedAsync(app.Services); //Seed za DbInitializer
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
