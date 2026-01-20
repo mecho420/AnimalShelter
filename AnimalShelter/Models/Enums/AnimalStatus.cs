@@ -1,4 +1,13 @@
-﻿namespace AnimalShelter.Models.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AnimalShelter.Models.Enums
 {
-    public enum AnimalStatus { ForAdoption = 0, Adopted = 1 }
+    public enum AnimalStatus
+    {
+        [Display(Name = "За осиновяване")]
+        ForAdoption = 0,
+
+        [Display(Name = "Осиновено")]
+        Adopted = 1
+    }
 }

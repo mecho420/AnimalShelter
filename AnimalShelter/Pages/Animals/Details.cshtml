@@ -1,0 +1,54 @@
+﻿@page "{id:int}"
+@model AnimalShelter.Pages.Animals.DetailsModel
+
+@{
+    ViewData["Title"] = "Детайли";
+}
+
+<h1 class="mb-4">Детайли за животно</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <img src="@Model.Animal.ImagePath"
+             class="img-fluid rounded shadow"
+             alt="Снимка на @Model.Animal.Name" />
+    </div>
+
+    <div class="col-md-6">
+        <h2>@Model.Animal.Name</h2>
+
+        <p>
+            <strong>Вид:</strong> @Model.Animal.Species <br />
+            <strong>Възраст:</strong> @Model.Animal.Age години <br />
+            <strong>Пол:</strong> @Model.Animal.Gender <br />
+            <strong>Статус:</strong> @Model.Animal.Status
+        </p>
+
+        <hr />
+
+        <h5>Описание</h5>
+        <p>@Model.Animal.Description</p>
+
+        <h5>Здравна информация</h5>
+        <p>@(string.IsNullOrWhiteSpace(Model.Animal.HealthInfo) ? "Няма информация." : Model.Animal.HealthInfo)</p>
+
+        <div class="mt-4">
+            <a asp-page="/Animals/Index" class="btn btn-secondary">Назад</a>
+
+            @if (User.Identity?.IsAuthenticated ?? false)
+            {
+                <a asp-page="/Adoptions/Create"
+                   asp-route-animalId="@Model.Animal.Id"
+                   class="btn btn-success ms-2">
+                    Подай заявка за осиновяване
+                </a>
+            }
+            else
+            {
+                <a href="/Identity/Account/Login" class="btn btn-primary ms-2">
+                    Влез, за да подадеш заявка
+                </a>
+            }
+        </div>
+    </div>
+</div>
