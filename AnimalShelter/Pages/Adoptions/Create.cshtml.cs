@@ -27,19 +27,23 @@ namespace AnimalShelter.Pages.Adoptions
 
         public class InputModel
         {
+            [Display(Name = "Име и фамилия")]
             [Required(ErrorMessage = "Моля, въведете име и фамилия.")]
             [StringLength(100)]
             public string FullName { get; set; } = "";
 
+            [Display(Name = "Телефон")]
             [Required(ErrorMessage = "Моля, въведете телефон.")]
             [StringLength(30)]
             public string Phone { get; set; } = "";
 
+            [Display(Name = "Имейл")]
             [Required(ErrorMessage = "Моля, въведете имейл.")]
             [EmailAddress(ErrorMessage = "Невалиден имейл адрес.")]
             [StringLength(100)]
             public string Email { get; set; } = "";
 
+            [Display(Name = "Коментар (по желание)")]
             [StringLength(1000)]
             public string? Comment { get; set; }
         }
