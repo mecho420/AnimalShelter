@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AnimalShelter.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace AnimalShelter.Models
 {
@@ -13,6 +14,7 @@ namespace AnimalShelter.Models
 
         [Required]
         public string UserId { get; set; } = "";
+        public IdentityUser? User { get; set; }
 
         [Required, StringLength(100)]
         public string FullName { get; set; } = "";
