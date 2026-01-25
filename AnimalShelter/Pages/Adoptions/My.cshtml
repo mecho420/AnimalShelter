@@ -1,0 +1,42 @@
+﻿@page
+@model AnimalShelter.Pages.Adoptions.MyModel
+@using AnimalShelter.Helpers
+
+@{
+    ViewData["Title"] = "Моите заявки";
+}
+
+<h1 class="mb-4">Моите заявки</h1>
+
+@if (!Model.Requests.Any())
+{
+    <p>Все още нямате подадени заявки.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Животно</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Requests)
+            {
+                <tr>
+                    <td>@r.Animal?.Name</td>
+                    <td>@r.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@r.Status.GetDisplayName()</td>
+                    <td>
+                        <a asp-page="/Animals/Details" asp-route-id="@r.AnimalId" class="btn btn-sm btn-outline-primary">
+                            Детайли
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

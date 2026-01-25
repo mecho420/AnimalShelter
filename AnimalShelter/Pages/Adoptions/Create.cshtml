@@ -1,4 +1,72 @@
 ﻿@page
 @model AnimalShelter.Pages.Adoptions.CreateModel
+
 @{
+    ViewData["Title"] = "Заявка за осиновяване";
+}
+
+<h1 class="mb-4">Заявка за осиновяване</h1>
+
+<div class="row">
+    <div class="col-md-5 mb-4">
+        <div class="card">
+            <img src="@Model.Animal.ImagePath" class="card-img-top" style="height: 220px; object-fit: cover;" />
+            <div class="card-body">
+                <h5 class="card-title">@Model.Animal.Name</h5>
+                <p class="card-text">
+                    <strong>Вид:</strong> @Model.Animal.Species <br />
+                    <strong>Възраст:</strong> @Model.Animal.Age години
+                </p>
+                <a asp-page="/Animals/Details" asp-route-id="@Model.Animal.Id" class="btn btn-outline-secondary">
+                    Назад към детайли
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-3">Вашите данни</h5>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <form method="post">
+                    <input type="hidden" name="animalId" value="@Model.Animal.Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Input.FullName" class="form-label"></label>
+                        <input asp-for="Input.FullName" class="form-control" />
+                        <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Phone" class="form-label"></label>
+                        <input asp-for="Input.Phone" class="form-control" />
+                        <span asp-validation-for="Input.Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Comment" class="form-label">Коментар (по желание)</label>
+                        <textarea asp-for="Input.Comment" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Input.Comment" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">
+                        Подай заявката
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

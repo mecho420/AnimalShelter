@@ -101,7 +101,7 @@ namespace AnimalShelter.Pages.Adoptions
             _context.AdoptionRequests.Add(request);
             await _context.SaveChangesAsync();
 
-            // Пренасочване към "Моите заявки" (ще я направим след малко)
+            // Пренасочване към "Моите заявки" (ще я направя след малко) 
             return RedirectToPage("/Adoptions/My");
         }
     }
