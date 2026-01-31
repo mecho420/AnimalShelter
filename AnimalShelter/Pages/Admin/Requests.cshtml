@@ -1,0 +1,68 @@
+﻿@page
+@model AnimalShelter.Pages.Admin.RequestsModel
+@using AnimalShelter.Helpers
+
+@{
+    ViewData["Title"] = "Заявки за осиновяване (Admin)";
+}
+
+<h1 class="mb-4">Заявки за осиновяване</h1>
+
+@if (!Model.Requests.Any())
+{
+    <p>Няма подадени заявки.</p>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Животно</th>
+                <th>Кандидат</th>
+                <th>Телефон</th>
+                <th>Имейл</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th style="width:220px;">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Requests)
+            {
+                <tr>
+                    <td>
+                        <strong>@r.Animal?.Name</strong><br />
+                        <a asp-page="/Animals/Details" asp-route-id="@r.AnimalId">Детайли</a>
+                    </td>
+                    <td>@r.FullName</td>
+                    <td>@r.Phone</td>
+                    <td>@r.Email</td>
+                    <td>@r.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@r.Status.GetDisplayName()</td>
+                    <td>
+                        @if (r.Status == AnimalShelter.Models.Enums.RequestStatus.New)
+                        {
+                            <form method="post" class="d-inline">
+                                <button asp-page-handler="Approve" asp-route-id="@r.Id"
+                                        class="btn btn-success btn-sm">
+                                    Одобри
+                                </button>
+                            </form>
+
+                            <form method="post" class="d-inline ms-1">
+                                <button asp-page-handler="Reject" asp-route-id="@r.Id"
+                                        class="btn btn-danger btn-sm">
+                                    Откажи
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Няма действия</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
