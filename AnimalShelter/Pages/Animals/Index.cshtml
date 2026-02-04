@@ -16,29 +16,32 @@
     {
         foreach (var animal in Model.Animals)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100 animal-card">
                     <img src="@animal.ImagePath"
-                         class="card-img-top"
-                         alt="Снимка на @animal.Name"
-                         style="height: 200px; object-fit: cover;" />
+                             class="card-img-top animal-img"
+                             alt="Снимка на @animal.Name" />
 
-                    <div class="card-body">
-                        <h5 class="card-title">@animal.Name</h5>
-                        <p class="card-text">
-                            <strong>Вид:</strong> @animal.Species <br />
-                            <strong>Възраст:</strong> @animal.Age години
-                        </p>
-                    </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title mb-2">@animal.Name</h5>
 
-                    <div class="card-footer text-center">
-                        <a asp-page="/Animals/Details" asp-route-id="@animal.Id" class="btn btn-primary">
+                            <ul class="list-unstyled mb-3">
+                                <li><strong>Вид:</strong> @animal.Species</li>
+                                <li><strong>Възраст:</strong> @animal.Age години</li>
+                            </ul>
+
+                            <div class="mt-auto">
+                                <a class="btn btn-primary w-100"
+                                   asp-page="/Animals/Details"
+                                   asp-route-id="@animal.Id">
                             Виж детайли
                         </a>
                     </div>
                 </div>
             </div>
+                </div>
         }
     }
 </div>
+    }
 
