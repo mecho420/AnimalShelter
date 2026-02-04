@@ -18,10 +18,19 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    <!-- ЛЯВО МЕНЮ -->
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-page="/Index">Home</a>
                         </li>
+
+                        @if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Adoptions/My">Моите заявки</a>
+                            </li>
+                        }
 
                         @if (User.IsInRole("Admin"))
                         {
@@ -34,6 +43,12 @@
                             <a class="nav-link text-dark" asp-page="/Privacy">Privacy</a>
                         </li>
                     </ul>
+
+                    <!-- ДЯСНО МЕНЮ (LOGIN / REGISTER / LOGOUT) -->
+                    <ul class="navbar-nav">
+                        <partial name="_LoginPartial" />
+                    </ul>
+
                 </div>
             </div>
         </nav>

@@ -19,6 +19,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddScoped<AnimalShelter.Services.IImageService, AnimalShelter.Services.ImageService>();
+
+
 var app = builder.Build();
 
 await DbInitializer.SeedAsync(app.Services); //Seed za DbInitializer
@@ -41,3 +44,4 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+

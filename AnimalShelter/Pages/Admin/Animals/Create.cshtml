@@ -1,0 +1,75 @@
+﻿@page
+@model AnimalShelter.Pages.Admin.Animals.CreateModel
+
+@{
+    ViewData["Title"] = "Добави животно";
+}
+
+<h1 class="mb-4">Добави животно</h1>
+
+<div class="card">
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Input.Name" class="form-label"></label>
+                    <input asp-for="Input.Name" class="form-control" />
+                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Input.Species" class="form-label"></label>
+                    <input asp-for="Input.Species" class="form-control" placeholder="Куче / Котка / Друго" />
+                    <span asp-validation-for="Input.Species" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="Input.Age" class="form-label"></label>
+                    <input asp-for="Input.Age" class="form-control" />
+                    <span asp-validation-for="Input.Age" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="Input.Gender" class="form-label"></label>
+                    <select asp-for="Input.Gender" class="form-select"
+                            asp-items="Html.GetEnumSelectList<AnimalShelter.Models.Enums.Gender>()"></select>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="Input.Status" class="form-label"></label>
+                    <select asp-for="Input.Status" class="form-select"
+                            asp-items="Html.GetEnumSelectList<AnimalShelter.Models.Enums.AnimalStatus>()"></select>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="ImageFile" class="form-label">Снимка (по желание)</label>
+                    <input asp-for="ImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                    <div class="form-text">Ако не качиш снимка, ще се използва default.</div>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="Input.Description" class="form-label"></label>
+                    <textarea asp-for="Input.Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Input.Description" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="Input.HealthInfo" class="form-label"></label>
+                    <textarea asp-for="Input.HealthInfo" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Input.HealthInfo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-success">Запази</button>
+                <a asp-page="/Admin/Requests" class="btn btn-outline-secondary">Назад</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
