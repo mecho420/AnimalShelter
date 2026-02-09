@@ -1,56 +1,93 @@
 ﻿@page "{id:int}"
 @model AnimalShelter.Pages.Animals.DetailsModel
-@using AnimalShelter.Helpers
 
 @{
-    ViewData["Title"] = "Детайли";
+    ViewData["Title"] = "Детайли за животно";
+    var a = Model.Animal;
+    var img = string.IsNullOrWhiteSpace(a.ImagePath) ? "/images/animals/default-dog.jpg" : a.ImagePath;
+
+    // badge клас за статус
+    var statusBadge = a.Status.ToString() switch
+    {
+        "ForAdoption" => "bg-success",
+        "Adopted" => "bg-secondary",
+        _ => "bg-secondary"
+    };
+
+    // badge клас за пол
+    var genderBadge = a.Gender.ToString() switch
+    {
+        "Male" => "bg-primary",
+        "Female" => "bg-danger",
+        _ => "bg-secondary"
+    };
 }
 
 <h1 class="mb-4">Детайли за животно</h1>
 
-<div class="row">
-    <div class="col-md-6">
-        <img src="@Model.Animal.ImagePath"
-             class="img-fluid rounded shadow"
-             alt="Снимка на @Model.Animal.Name" />
-    </div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="row g-4 align-items-start">
 
-    <div class="col-md-6">
-        <h2>@Model.Animal.Name</h2>
+            <div class="col-12 col-lg-5">
+                <img src="@img" class="rounded details-img" alt="Снимка на @a.Name" />
+            </div>
 
-        <p>
-            <strong>Вид:</strong> @Model.Animal.Species <br />
-            <strong>Възраст:</strong> @Model.Animal.Age години <br />
-            <strong>Пол:</strong> @Model.Animal.Gender.GetDisplayName() <br />
-            <strong>Статус:</strong> @Model.Animal.Status.GetDisplayName()
-        </p>
+            <div class="col-12 col-lg-7">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <h2 class="mb-2">@a.Name</h2>
 
-        <hr />
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <span class="badge @statusBadge">Статус: @a.Status</span>
+                            <span class="badge @genderBadge">Пол: @a.Gender</span>
+                        </div>
+                    </div>
+                </div>
 
-        <h5>Описание</h5>
-        <p>@Model.Animal.Description</p>
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-6">
+                        <div class="border rounded p-3">
+                            <div class="text-muted small">Вид</div>
+                            <div class="fw-semibold">@a.Species</div>
+                        </div>
+                    </div>
 
-        <h5>Здравна информация</h5>
-        <p>@(string.IsNullOrWhiteSpace(Model.Animal.HealthInfo) ? "Няма информация." : Model.Animal.HealthInfo)</p>
+                    <div class="col-12 col-md-6">
+                        <div class="border rounded p-3">
+                            <div class="text-muted small">Възраст</div>
+                            <div class="fw-semibold">@a.Age години</div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="mt-4">
-            <a asp-page="/Animals/Index" class="btn btn-secondary">Назад</a>
+                <hr />
 
-            @if ((User.Identity?.IsAuthenticated ?? false) &&
-            Model.Animal.Status == AnimalShelter.Models.Enums.AnimalStatus.ForAdoption)
-            {
-                <a asp-page="/Adoptions/Create"
-                   asp-route-animalId="@Model.Animal.Id"
-                   class="btn btn-success ms-2">
-                    Подай заявка за осиновяване
-                </a>
-            }
-            else
-            {
-                <a href="/Identity/Account/Login" class="btn btn-primary ms-2">
-                    Влез, за да подадеш заявка
-                </a>
-            }
+                <h5 class="mt-3">Описание</h5>
+                <p class="mb-3">@a.Description</p>
+
+                <h5>Здравна информация</h5>
+                <p class="mb-4">@(!string.IsNullOrWhiteSpace(a.HealthInfo) ? a.HealthInfo : "Няма добавена информация.")</p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-outline-secondary" asp-page="/Animals/Index">Назад</a>
+
+                    @* Показваме бутона за заявка само ако животното е за осиновяване *@
+                    @if (a.Status.ToString() == "ForAdoption")
+                    {
+                        <a class="btn btn-success"
+                           asp-page="/Adoptions/Create"
+                           asp-route-animalId="@a.Id">
+                            Подай заявка за осиновяване
+                        </a>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary" disabled>Вече е осиновено</button>
+                    }
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

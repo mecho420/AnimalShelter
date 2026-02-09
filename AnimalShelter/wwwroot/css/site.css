@@ -37,3 +37,10 @@ body {
     object-fit: cover;
     width: 100%;
 }
+
+.details-img {
+    max-height: 360px;
+    width: 100%;
+    object-fit: cover;
+}
+
