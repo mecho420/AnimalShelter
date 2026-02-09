@@ -44,3 +44,12 @@ body {
     object-fit: cover;
 }
 
+.form-card {
+    border-radius: .75rem;
+}
+
+.animal-preview-img {
+    max-height: 280px;
+    width: 100%;
+    object-fit: cover;
+}

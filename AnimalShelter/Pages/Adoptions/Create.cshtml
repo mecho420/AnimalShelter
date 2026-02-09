@@ -3,68 +3,86 @@
 
 @{
     ViewData["Title"] = "Заявка за осиновяване";
+    var a = Model.Animal;
+    var img = string.IsNullOrWhiteSpace(a?.ImagePath) ? "/images/animals/default-dog.jpg" : a.ImagePath;
 }
 
 <h1 class="mb-4">Заявка за осиновяване</h1>
 
-<div class="row">
-    <div class="col-md-5 mb-4">
-        <div class="card">
-            <img src="@Model.Animal.ImagePath" class="card-img-top" style="height: 220px; object-fit: cover;" />
+<div class="row g-4 align-items-start">
+
+    <div class="col-12 col-lg-5">
+        <div class="card shadow-sm form-card">
             <div class="card-body">
-                <h5 class="card-title">@Model.Animal.Name</h5>
-                <p class="card-text">
-                    <strong>Вид:</strong> @Model.Animal.Species <br />
-                    <strong>Възраст:</strong> @Model.Animal.Age години
-                </p>
-                <a asp-page="/Animals/Details" asp-route-id="@Model.Animal.Id" class="btn btn-outline-secondary">
-                    Назад към детайли
-                </a>
+                <h5 class="mb-3">Животно</h5>
+
+                <img src="@img" class="rounded animal-preview-img mb-3" alt="Снимка на @a?.Name" />
+
+                <h4 class="mb-2">@a?.Name</h4>
+
+                <div class="text-muted">
+                    <div><strong>Вид:</strong> @a?.Species</div>
+                    <div><strong>Възраст:</strong> @a?.Age години</div>
+                </div>
+
+                <div class="mt-3">
+                    <a class="btn btn-outline-secondary w-100"
+                       asp-page="/Animals/Details"
+                       asp-route-id="@a?.Id">
+                        Назад към детайли
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-7">
-        <div class="card">
+    <div class="col-12 col-lg-7">
+        <div class="card shadow-sm form-card">
             <div class="card-body">
                 <h5 class="mb-3">Вашите данни</h5>
 
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                 <form method="post">
-                    <input type="hidden" name="animalId" value="@Model.Animal.Id" />
+                    <div class="row g-3">
 
-                    <div class="mb-3">
-                        <label asp-for="Input.FullName" class="form-label"></label>
-                        <input asp-for="Input.FullName" class="form-control" />
-                        <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                        <div class="col-12">
+                            <label asp-for="Input.FullName" class="form-label"></label>
+                            <input asp-for="Input.FullName" class="form-control" placeholder="Например: Иван Иванов" />
+                            <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Input.Phone" class="form-label"></label>
+                            <input asp-for="Input.Phone" class="form-control" placeholder="08xxxxxxxx" />
+                            <span asp-validation-for="Input.Phone" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Input.Email" class="form-label"></label>
+                            <input asp-for="Input.Email" class="form-control" placeholder="example@mail.com" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Input.Comment" class="form-label"></label>
+                            <textarea asp-for="Input.Comment" class="form-control" rows="5"
+                                      placeholder="Напиши кратко защо искаш да осиновиш, условия вкъщи, опит с животни, график за разходки."></textarea>
+                            <div class="form-text">Коментарът е по желание, но помага на приюта да вземе решение.</div>
+                            <span asp-validation-for="Input.Comment" class="text-danger"></span>
+                        </div>
+
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="Input.Phone" class="form-label"></label>
-                        <input asp-for="Input.Phone" class="form-control" />
-                        <span asp-validation-for="Input.Phone" class="text-danger"></span>
+                    <div class="mt-4 d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-success">Подай заявката</button>
+                        <a class="btn btn-outline-secondary" asp-page="/Animals/Index">Към всички животни</a>
                     </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Input.Email" class="form-label"></label>
-                        <input asp-for="Input.Email" class="form-control" />
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Input.Comment" class="form-label"></label>
-                        <textarea asp-for="Input.Comment" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="Input.Comment" class="text-danger"></span>
-                    </div>
-
-                    <button type="submit" class="btn btn-success">
-                        Подай заявката
-                    </button>
                 </form>
             </div>
         </div>
     </div>
+
 </div>
 
 @section Scripts {
