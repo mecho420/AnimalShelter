@@ -1,4 +1,5 @@
 using AnimalShelter.Data;
+using AnimalShelter.Helpers;
 using AnimalShelter.Models;
 using AnimalShelter.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -102,17 +103,17 @@ namespace AnimalShelter.Pages.Admin.Animals
                 .Cast<Gender>()
                 .Select(g => new SelectListItem
                 {
-                    Value = g.ToString(),
-                    Text = g.ToString()
+                     Value = g.ToString(),
+                     Text = g.GetDisplayName()
                 })
-                .ToList();
+                 .ToList();
 
             StatusOptions = Enum.GetValues(typeof(AnimalStatus))
                 .Cast<AnimalStatus>()
                 .Select(s => new SelectListItem
                 {
                     Value = s.ToString(),
-                    Text = s.ToString()
+                    Text = s.GetDisplayName()
                 })
                 .ToList();
         }
