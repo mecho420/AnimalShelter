@@ -1,0 +1,89 @@
+﻿@page "{id:int}"
+@model AnimalShelter.Pages.Admin.Animals.EditModel
+
+@{
+    ViewData["Title"] = "Редакция на животно";
+}
+
+<h1 class="mb-4">Редакция на животно</h1>
+
+<div class="row g-4">
+    <div class="col-12 col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="mb-3">Текуща снимка</h5>
+                <img src="@Model.CurrentImagePath" class="rounded" style="width:100%;max-height:260px;object-fit:cover;" />
+                <div class="text-muted small mt-2">Ако качиш нова снимка, тя ще замени текущата.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Animal.Id" />
+                    <input type="hidden" asp-for="Animal.ImagePath" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Animal.Name" class="form-label">Име</label>
+                            <input asp-for="Animal.Name" class="form-control" />
+                            <span asp-validation-for="Animal.Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label asp-for="Animal.Species" class="form-label">Вид</label>
+                            <input asp-for="Animal.Species" class="form-control" />
+                            <span asp-validation-for="Animal.Species" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label asp-for="Animal.Age" class="form-label">Възраст</label>
+                            <input asp-for="Animal.Age" class="form-control" />
+                            <span asp-validation-for="Animal.Age" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label asp-for="Animal.Gender" class="form-label">Пол</label>
+                            <select asp-for="Animal.Gender" class="form-select" asp-items="Model.GenderOptions"></select>
+                            <span asp-validation-for="Animal.Gender" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label asp-for="Animal.Status" class="form-label">Статус</label>
+                            <select asp-for="Animal.Status" class="form-select" asp-items="Model.StatusOptions"></select>
+                            <span asp-validation-for="Animal.Status" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Нова снимка (по желание)</label>
+                            <input type="file" class="form-control" asp-for="ImageFile" />
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Animal.Description" class="form-label">Описание</label>
+                            <textarea asp-for="Animal.Description" class="form-control" rows="4"></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Animal.HealthInfo" class="form-label">Здравна информация</label>
+                            <textarea asp-for="Animal.HealthInfo" class="form-control" rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex gap-2">
+                        <button class="btn btn-primary" type="submit">Запази</button>
+                        <a class="btn btn-outline-secondary" asp-page="/Admin/Animals/Index">Назад</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
