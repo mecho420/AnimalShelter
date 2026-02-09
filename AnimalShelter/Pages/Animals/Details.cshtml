@@ -1,5 +1,7 @@
 ﻿@page "{id:int}"
 @model AnimalShelter.Pages.Animals.DetailsModel
+@using AnimalShelter.Helpers
+
 
 @{
     ViewData["Title"] = "Детайли за животно";
@@ -9,7 +11,7 @@
     // badge клас за статус
     var statusBadge = a.Status.ToString() switch
     {
-        "ForAdoption" => "bg-success",
+        "ForAdoption" => "bg-success", 
         "Adopted" => "bg-secondary",
         _ => "bg-secondary"
     };
@@ -39,8 +41,13 @@
                         <h2 class="mb-2">@a.Name</h2>
 
                         <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="badge @statusBadge">Статус: @a.Status</span>
-                            <span class="badge @genderBadge">Пол: @a.Gender</span>
+                            <span class="badge @statusBadge">
+                                Статус: @a.Status.GetDisplayName()
+                            </span>
+
+                            <span class="badge @genderBadge">
+                                Пол: @a.Gender.GetDisplayName()
+                            </span>
                         </div>
                     </div>
                 </div>
