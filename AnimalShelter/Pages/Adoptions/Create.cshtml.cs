@@ -79,7 +79,7 @@ namespace AnimalShelter.Pages.Adoptions
                 return RedirectToPage("/Animals/Details", new { id = animal.Id });
             }
 
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid)    
             {
                 Animal = animal;
                 return Page();

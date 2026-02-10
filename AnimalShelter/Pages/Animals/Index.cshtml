@@ -1,5 +1,6 @@
 ﻿@page
 @model AnimalShelter.Pages.Animals.IndexModel
+@using AnimalShelter.Models.Enums
 
 @{
 	ViewData["Title"] = "Животни за осиновяване";
@@ -18,13 +19,24 @@
             @foreach (var animal in Model.Animals)
             {
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card h-100 animal-card">
+                    <div class="card h-100 @(animal.Status == AnimalStatus.Adopted ? "opacity-75" : "")">
                         <img src="@(string.IsNullOrWhiteSpace(animal.ImagePath) ? "/images/animals/default-dog.jpg" : animal.ImagePath)"
                              class="card-img-top animal-img"
                              alt="Снимка на @animal.Name" />
 
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title mb-2">@animal.Name</h5>
+                            <h5 class="card-title">
+                                @animal.Name
+
+                                @if (animal.Status == AnimalStatus.ForAdoption)
+                                {
+                                    <span class="badge bg-success ms-2">За осиновяване</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary ms-2">Осиновено</span>
+                                }
+                            </h5>
 
                             <ul class="list-unstyled mb-3">
                                 <li><strong>Вид:</strong> @animal.Species</li>
@@ -37,6 +49,12 @@
                                    asp-route-id="@animal.Id">
                                     Виж детайли
                                 </a>
+                                @if (animal.Status == AnimalStatus.Adopted)
+                                {
+                                    <small class="text-muted d-block mt-2">
+                                        Това животно вече е осиновено.
+                                    </small>
+                                }
                             </div>
                         </div>
                     </div>
