@@ -58,6 +58,13 @@ namespace AnimalShelter.Pages.Adoptions
                 return RedirectToPage("/Animals/Details", new { id = animalId });
 
             Animal = animal;
+
+            if (Animal.Status != AnimalStatus.ForAdoption)
+            {
+                TempData["Error"] = "Това животно вече е осиновено и не приема нови заявки.";
+                return RedirectToPage("/Animals/Details", new { id = Animal.Id });
+            }
+
             return Page();
         }
 
@@ -66,8 +73,11 @@ namespace AnimalShelter.Pages.Adoptions
             var animal = await _context.Animals.FirstOrDefaultAsync(a => a.Id == animalId);
             if (animal == null) return NotFound();
 
-            if (animal.Status == AnimalStatus.Adopted)
-                return RedirectToPage("/Animals/Details", new { id = animalId });
+            if (animal.Status != AnimalStatus.ForAdoption)
+            {
+                TempData["Error"] = "Това животно вече е осиновено и не приема нови заявки.";
+                return RedirectToPage("/Animals/Details", new { id = animal.Id });
+            }
 
             if (!ModelState.IsValid)
             {
