@@ -46,11 +46,62 @@ else
                     <td>@a.Gender.GetDisplayName()</td>
                     <td>@a.Status.GetDisplayName()</td>
                     <td class="text-end">
-                        <a class="btn btn-sm btn-outline-primary" asp-page="/Admin/Animals/Edit" asp-route-id="@a.Id">Редакция</a>
-                        <a class="btn btn-sm btn-outline-danger ms-1" asp-page="/Admin/Animals/Delete" asp-route-id="@a.Id">Изтрий</a>
+                        <a class="btn btn-sm btn-outline-primary"
+                           asp-page="/Admin/Animals/Edit"
+                           asp-route-id="@a.Id">Редакция</a>
+
+                        <button type="button"
+                                class="btn btn-sm btn-outline-danger ms-1"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal"
+                                data-animal-id="@a.Id"
+                                data-animal-name="@a.Name">
+                            Изтрий
+                        </button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Потвърждение</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
+                </div>
+
+                <div class="modal-body">
+                    Сигурен ли си, че искаш да изтриеш животното:
+                    <strong id="deleteAnimalName"></strong>?
+                    <div class="text-danger mt-2">Това действие не може да бъде върнато.</div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отказ</button>
+
+                    <form method="post" asp-page-handler="Delete">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" id="deleteAnimalId" />
+                        <button type="submit" class="btn btn-danger">Да, изтрий</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-animal-id');
+            const name = button.getAttribute('data-animal-name');
+
+            document.getElementById('deleteAnimalId').value = id;
+            document.getElementById('deleteAnimalName').textContent = name;
+        });
+    </script>
+    }
 }
