@@ -19,7 +19,7 @@
             @foreach (var animal in Model.Animals)
             {
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card h-100 @(animal.Status == AnimalStatus.Adopted ? "opacity-75" : "")">
+                    <div class="card h-100 animal-card @(animal.Status == AnimalStatus.Adopted ? "opacity-75" : "")">
                         <img src="@(string.IsNullOrWhiteSpace(animal.ImagePath) ? "/images/animals/default-dog.jpg" : animal.ImagePath)"
                              class="card-img-top animal-img"
                              alt="Снимка на @animal.Name" />
