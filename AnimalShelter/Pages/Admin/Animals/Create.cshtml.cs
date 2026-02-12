@@ -61,6 +61,7 @@ namespace AnimalShelter.Pages.Admin.Animals
 
         public void OnGet()
         {
+
         }
 
         public async Task<IActionResult> OnPostAsync()
