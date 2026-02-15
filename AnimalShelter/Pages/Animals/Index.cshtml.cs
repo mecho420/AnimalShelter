@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using AnimalShelter.Data;
 using AnimalShelter.Models;
-using AnimalShelter.Models.Enums;
 using AnimalShelter.Services;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AnimalShelter.Pages.Animals
 {
