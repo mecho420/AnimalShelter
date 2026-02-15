@@ -3,25 +3,25 @@ using Microsoft.EntityFrameworkCore;
 using AnimalShelter.Data;
 using AnimalShelter.Models;
 using AnimalShelter.Models.Enums;
+using AnimalShelter.Services;
 
 namespace AnimalShelter.Pages.Animals
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAnimalService animalService;
 
-        public IndexModel(ApplicationDbContext context)
+        public IndexModel(IAnimalService animalService)
         {
-            _context = context;
+            this.animalService = animalService;
         }
+
 
         public List<Animal> Animals { get; set; } = new();
 
         public async Task OnGetAsync()
         {
-            Animals = await _context.Animals
-                .Where(a => a.Status == AnimalStatus.ForAdoption)
-                .ToListAsync();
+            Animals = await animalService.GetPublicAnimalsAsync();
         }
     }
 }
