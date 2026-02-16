@@ -13,6 +13,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IImageService, ImageService>();
+
 builder.Services.AddScoped<IAnimalService, AnimalService>();
 
 builder.Services.AddScoped<IAdoptionService, AdoptionService>();

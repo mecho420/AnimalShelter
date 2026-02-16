@@ -2,6 +2,7 @@ using AnimalShelter.Data;
 using AnimalShelter.Helpers;
 using AnimalShelter.Models;
 using AnimalShelter.Models.Enums;
+using AnimalShelter.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,11 +16,13 @@ namespace AnimalShelter.Pages.Admin.Animals
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly IImageService imageService;
 
-        public EditModel(ApplicationDbContext context, IWebHostEnvironment env)
+        public EditModel(ApplicationDbContext context, IWebHostEnvironment env, IImageService imageService)
         {
             _context = context;
             _env = env;
+            this.imageService = imageService;
         }
 
         [BindProperty]
@@ -70,27 +73,24 @@ namespace AnimalShelter.Pages.Admin.Animals
             // Ако има нова снимка се качва и сменяме ImagePath
             if (ImageFile != null && ImageFile.Length > 0)
             {
-                var ext = Path.GetExtension(ImageFile.FileName).ToLowerInvariant();
-                var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-                if (!allowed.Contains(ext))
+                var oldImagePath = dbAnimal.ImagePath;
+
+                string newPath;
+                try
                 {
-                    ModelState.AddModelError(string.Empty, "Позволени формати: .jpg, .jpeg, .png, .webp");
+                    newPath = await imageService.SaveAnimalImageAsync(ImageFile);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
                     CurrentImagePath = string.IsNullOrWhiteSpace(dbAnimal.ImagePath) ? CurrentImagePath : dbAnimal.ImagePath;
                     return Page();
                 }
 
-                var uploadsFolder = Path.Combine(_env.WebRootPath, "images", "animals");
-                Directory.CreateDirectory(uploadsFolder);
+                dbAnimal.ImagePath = newPath;
 
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    await ImageFile.CopyToAsync(stream);
-                }
-
-                dbAnimal.ImagePath = $"/images/animals/{fileName}";
+                // Трием старата снимка, само ако е custom
+                imageService.DeleteAnimalImageIfCustom(oldImagePath);
             }
 
             await _context.SaveChangesAsync();
