@@ -49,20 +49,28 @@ namespace AnimalShelter.Services
             return animal.Id;
         }
 
-        public async Task<bool> UpdateAsync(Animal animal)
+        public async Task<bool> UpdateAsync(Animal input, IFormFile? imageFile)
         {
-            var existing = await db.Animals.FirstOrDefaultAsync(a => a.Id == animal.Id);
-            if (existing == null) return false;
+            var dbAnimal = await db.Animals.FirstOrDefaultAsync(a => a.Id == input.Id);
+            if (dbAnimal == null) return false;
 
-            // Мапване на полетата, които редактираме
-            existing.Name = animal.Name;
-            existing.Species = animal.Species;
-            existing.Age = animal.Age;
-            existing.Gender = animal.Gender;
-            existing.Status = animal.Status;
-            existing.Description = animal.Description;
-            existing.HealthInfo = animal.HealthInfo;
-            existing.ImagePath = animal.ImagePath;
+            dbAnimal.Name = input.Name;
+            dbAnimal.Species = input.Species;
+            dbAnimal.Age = input.Age;
+            dbAnimal.Gender = input.Gender;
+            dbAnimal.Status = input.Status;
+            dbAnimal.Description = input.Description;
+            dbAnimal.HealthInfo = input.HealthInfo;
+
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var oldImagePath = dbAnimal.ImagePath;
+
+                var newPath = await imageService.SaveAnimalImageAsync(imageFile);
+                dbAnimal.ImagePath = newPath;
+
+                imageService.DeleteAnimalImageIfCustom(oldImagePath);
+            }
 
             await db.SaveChangesAsync();
             return true;

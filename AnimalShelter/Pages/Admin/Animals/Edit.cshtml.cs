@@ -14,15 +14,11 @@ namespace AnimalShelter.Pages.Admin.Animals
     [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _env;
-        private readonly IImageService imageService;
+        private readonly IAnimalService animalService;
 
-        public EditModel(ApplicationDbContext context, IWebHostEnvironment env, IImageService imageService)
+        public EditModel(IAnimalService animalService)
         {
-            _context = context;
-            _env = env;
-            this.imageService = imageService;
+            this.animalService = animalService;
         }
 
         [BindProperty]
@@ -38,13 +34,15 @@ namespace AnimalShelter.Pages.Admin.Animals
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var animal = await _context.Animals.FirstOrDefaultAsync(a => a.Id == id);
-            if (animal == null) return NotFound();
+            LoadDropdowns();
+
+            var animal = await animalService.GetByIdAsync(id);
+            if (animal == null)
+                return NotFound();
 
             Animal = animal;
-            CurrentImagePath = string.IsNullOrWhiteSpace(animal.ImagePath) ? CurrentImagePath : animal.ImagePath;
+            CurrentImagePath = string.IsNullOrWhiteSpace(Animal.ImagePath) ? CurrentImagePath : Animal.ImagePath;
 
-            LoadDropdowns();
             return Page();
         }
 
@@ -58,42 +56,18 @@ namespace AnimalShelter.Pages.Admin.Animals
                 return Page();
             }
 
-            var dbAnimal = await _context.Animals.FirstOrDefaultAsync(a => a.Id == Animal.Id);
-            if (dbAnimal == null) return NotFound();
-
-            // Update полетата
-            dbAnimal.Name = Animal.Name;
-            dbAnimal.Species = Animal.Species;
-            dbAnimal.Age = Animal.Age;
-            dbAnimal.Gender = Animal.Gender;
-            dbAnimal.Status = Animal.Status;
-            dbAnimal.Description = Animal.Description;
-            dbAnimal.HealthInfo = Animal.HealthInfo;
-
-            // Ако има нова снимка се качва и сменяме ImagePath
-            if (ImageFile != null && ImageFile.Length > 0)
+            try
             {
-                var oldImagePath = dbAnimal.ImagePath;
-
-                string newPath;
-                try
-                {
-                    newPath = await imageService.SaveAnimalImageAsync(ImageFile);
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.Message);
-                    CurrentImagePath = string.IsNullOrWhiteSpace(dbAnimal.ImagePath) ? CurrentImagePath : dbAnimal.ImagePath;
-                    return Page();
-                }
-
-                dbAnimal.ImagePath = newPath;
-
-                // Трием старата снимка, само ако е custom
-                imageService.DeleteAnimalImageIfCustom(oldImagePath);
+                var ok = await animalService.UpdateAsync(Animal, ImageFile);
+                if (!ok) return NotFound();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                CurrentImagePath = string.IsNullOrWhiteSpace(Animal.ImagePath) ? CurrentImagePath : Animal.ImagePath;
+                return Page();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToPage("/Admin/Animals/Index");
         }
 
