@@ -12,13 +12,11 @@ namespace AnimalShelter.Pages.Admin.Animals
     [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IImageService _imageService;
+        private readonly IAnimalService animalService;
 
-        public CreateModel(ApplicationDbContext context, IImageService imageService)
+        public CreateModel(IAnimalService animalService)
         {
-            _context = context;
-            _imageService = imageService;
+            this.animalService = animalService;
         }
 
         [BindProperty]
@@ -68,26 +66,6 @@ namespace AnimalShelter.Pages.Admin.Animals
             if (!ModelState.IsValid)
                 return Page();
 
-            string imagePath;
-
-            if (ImageFile != null && ImageFile.Length > 0)
-            {
-                try
-                {
-                    imagePath = await _imageService.SaveAnimalImageAsync(ImageFile);
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.Message);
-                    return Page();
-                }
-            }
-            else
-            {
-                // default снимка (по желание може да е според Species)
-                imagePath = "/images/animals/default-dog.jpg";
-            }
-
             var animal = new Animal
             {
                 Name = Input.Name,
@@ -96,14 +74,20 @@ namespace AnimalShelter.Pages.Admin.Animals
                 Gender = Input.Gender,
                 Description = Input.Description,
                 HealthInfo = Input.HealthInfo,
-                Status = Input.Status,
-                ImagePath = imagePath
+                Status = Input.Status
+                // ImagePath ще се зададе в service
             };
 
-            _context.Animals.Add(animal);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("/Animals/Details", new { id = animal.Id });
+            try
+            {
+                var id = await animalService.CreateAsync(animal, ImageFile);
+                return RedirectToPage("/Animals/Details", new { id });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
+            }
         }
     }
 }

@@ -42,12 +42,24 @@ namespace AnimalShelter.Services
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<int> CreateAsync(Animal animal)
+        public async Task<int> CreateAsync(Animal animal, IFormFile? imageFile)
         {
+            // Снимка
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var imagePath = await imageService.SaveAnimalImageAsync(imageFile);
+                animal.ImagePath = imagePath;
+            }
+            else
+            {
+                animal.ImagePath = "/images/animals/default-dog.jpg";
+            }
+
             db.Animals.Add(animal);
             await db.SaveChangesAsync();
             return animal.Id;
         }
+
 
         public async Task<bool> UpdateAsync(Animal input, IFormFile? imageFile)
         {
