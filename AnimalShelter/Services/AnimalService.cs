@@ -90,12 +90,16 @@ namespace AnimalShelter.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var existing = await db.Animals.FirstOrDefaultAsync(a => a.Id == id);
-            if (existing == null) return false;
+            var animal = await db.Animals.FirstOrDefaultAsync(a => a.Id == id);
+            if (animal == null) return false;
 
-            imageService.DeleteAnimalImageIfCustom(existing.ImagePath);
+            var hasRequests = await db.AdoptionRequests.AnyAsync(r => r.AnimalId == id);
+            if (hasRequests)
+                throw new InvalidOperationException("Не може да се изтрие животно, за което има подадени заявки.");
 
-            db.Animals.Remove(existing);
+            imageService.DeleteAnimalImageIfCustom(animal.ImagePath);
+
+            db.Animals.Remove(animal);
             await db.SaveChangesAsync();
             return true;
         }

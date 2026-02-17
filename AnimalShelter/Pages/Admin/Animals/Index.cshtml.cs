@@ -27,7 +27,15 @@ namespace AnimalShelter.Pages.Admin.Animals
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            await animalService.DeleteAsync(id);
+            try
+            {
+                await animalService.DeleteAsync(id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
             return RedirectToPage();
         }
     }
