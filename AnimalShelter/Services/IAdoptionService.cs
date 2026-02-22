@@ -15,5 +15,8 @@ namespace AnimalShelter.Services
         Task<bool> RejectAsync(int requestId);
         Task<AdoptionRequest?> GetByIdAsync(int id);
         Task<bool> SetStatusAsync(int requestId, RequestStatus status);
+
+        // за страницата Create (зареждане на животното + проверки)
+        Task<Animal?> GetAnimalForAdoptionRequestAsync(int animalId);
     }
 }

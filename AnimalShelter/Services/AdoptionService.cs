@@ -17,6 +17,16 @@ namespace AnimalShelter.Services
             this.db = db;
         }
 
+        public async Task<Animal?> GetAnimalForAdoptionRequestAsync(int animalId)
+        {
+            var animal = await db.Animals.FirstOrDefaultAsync(a => a.Id == animalId);
+            if (animal == null) return null;
+
+            // ако не е за осиновяване, просто връщаме животното
+            // PageModel-а ще реши дали да редиректне
+            return animal;
+        }
+
         public async Task<bool> HasUserAlreadyRequestedAsync(int animalId, string userId)
         {
             return await db.AdoptionRequests.AnyAsync(r => r.AnimalId == animalId && r.UserId == userId);
