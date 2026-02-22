@@ -7,7 +7,8 @@ namespace AnimalShelter.Services
 {
     public interface IAdoptionService
     {
-        Task<int> CreateRequestAsync(AdoptionRequest request);
+        Task<bool> HasUserAlreadyRequestedAsync(int animalId, string userId);
+        Task<int> CreateRequestAsync(int animalId, string userId, string fullName, string phone, string email, string? comment);
         Task<List<AdoptionRequest>> GetMyRequestsAsync(string userId);
         Task<List<AdoptionRequest>> GetAllRequestsAsync(); // admin
         Task<AdoptionRequest?> GetByIdAsync(int id);
