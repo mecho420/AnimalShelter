@@ -1,20 +1,19 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using AnimalShelter.Data;
 using AnimalShelter.Models;
+using AnimalShelter.Services;
 
 namespace AnimalShelter.Pages.Adoptions
 {
     [Authorize]
     public class MyModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAdoptionService adoptionService;
 
-        public MyModel(ApplicationDbContext context)
+        public MyModel(IAdoptionService adoptionService)
         {
-            _context = context;
+            this.adoptionService = adoptionService;
         }
 
         public List<AdoptionRequest> Requests { get; set; } = new();
@@ -23,11 +22,13 @@ namespace AnimalShelter.Pages.Adoptions
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            Requests = await _context.AdoptionRequests
-                .Include(r => r.Animal)
-                .Where(r => r.UserId == userId)
-                .OrderByDescending(r => r.CreatedOn)
-                .ToListAsync();
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                Requests = new();
+                return;
+            }
+
+            Requests = await adoptionService.GetMyRequestsAsync(userId);
         }
     }
 }
