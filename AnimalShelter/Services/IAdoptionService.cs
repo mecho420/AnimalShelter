@@ -11,6 +11,8 @@ namespace AnimalShelter.Services
         Task<int> CreateRequestAsync(int animalId, string userId, string fullName, string phone, string email, string? comment);
         Task<List<AdoptionRequest>> GetMyRequestsAsync(string userId);
         Task<List<AdoptionRequest>> GetAllRequestsAsync(); // admin
+        Task<bool> ApproveAsync(int requestId);
+        Task<bool> RejectAsync(int requestId);
         Task<AdoptionRequest?> GetByIdAsync(int id);
         Task<bool> SetStatusAsync(int requestId, RequestStatus status);
     }

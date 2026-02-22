@@ -6,6 +6,13 @@
     ViewData["Title"] = "Заявки за осиновяване (Admin)";
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["Error"]
+    </div>
+}
+
 <h1 class="mb-4">Заявки за осиновяване</h1>
 
 <a class="btn btn-primary mb-3" asp-page="/Admin/Animals/Create">+ Добави животно</a>
@@ -44,18 +51,14 @@ else
                     <td>
                         @if (r.Status == AnimalShelter.Models.Enums.RequestStatus.New)
                         {
-                            <form method="post" class="d-inline">
-                                <button asp-page-handler="Approve" asp-route-id="@r.Id"
-                                        class="btn btn-success btn-sm">
-                                    Одобри
-                                </button>
+                            <form method="post" asp-page-handler="Approve" class="d-inline">
+                                <input type="hidden" name="id" value="@r.Id" />
+                                <button type="submit" class="btn btn-success btn-sm">Одобри</button>
                             </form>
 
-                            <form method="post" class="d-inline ms-1">
-                                <button asp-page-handler="Reject" asp-route-id="@r.Id"
-                                        class="btn btn-danger btn-sm">
-                                    Откажи
-                                </button>
+                            <form method="post" asp-page-handler="Reject" class="d-inline ms-2">
+                                <input type="hidden" name="id" value="@r.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Откажи</button>
                             </form>
                         }
                         else

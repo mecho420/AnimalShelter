@@ -72,6 +72,57 @@ namespace AnimalShelter.Services
                 .ToListAsync();
         }
 
+        public async Task<bool> ApproveAsync(int requestId)
+        {
+            // Вземаме заявката + животното
+            var req = await db.AdoptionRequests
+                .Include(r => r.Animal)
+                .FirstOrDefaultAsync(r => r.Id == requestId);
+
+            if (req == null) return false;
+
+            // Ако вече е обработена, не правим нищо
+            if (req.Status == RequestStatus.Approved) return true;
+
+            // Ако животното вече е осиновено, не може да одобрим нова заявка
+            if (req.Animal.Status == AnimalStatus.Adopted)
+                throw new InvalidOperationException("Животното вече е осиновено.");
+
+            // 1) Одобряваме тази заявка
+            req.Status = RequestStatus.Approved;
+
+            // 2) Маркираме животното като осиновено
+            req.Animal.Status = AnimalStatus.Adopted;
+
+            // 3) Отказваме всички други заявки за същото животно
+            var otherRequests = await db.AdoptionRequests
+                .Where(r => r.AnimalId == req.AnimalId && r.Id != req.Id && r.Status == RequestStatus.New)
+                .ToListAsync();
+
+            foreach (var r in otherRequests)
+                r.Status = RequestStatus.Rejected;
+
+            await db.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RejectAsync(int requestId)
+        {
+            var req = await db.AdoptionRequests.FirstOrDefaultAsync(r => r.Id == requestId);
+            if (req == null) return false;
+
+            // ако вече е отказана, няма проблем
+            if (req.Status == RequestStatus.Rejected) return true;
+
+            // ако е одобрена, не позволяваме да я откажем (по-логично)
+            if (req.Status == RequestStatus.Approved)
+                throw new InvalidOperationException("Одобрена заявка не може да бъде отказана.");
+
+            req.Status = RequestStatus.Rejected;
+            await db.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<AdoptionRequest?> GetByIdAsync(int id)
         {
             return await db.AdoptionRequests
