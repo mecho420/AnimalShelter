@@ -7,17 +7,20 @@ using Microsoft.EntityFrameworkCore;
 using AnimalShelter.Data;
 using AnimalShelter.Models;
 using AnimalShelter.Models.Enums;
+using AnimalShelter.Services;
 
 namespace AnimalShelter.Pages.Adoptions
 {
     [Authorize]
     public class CreateModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAnimalService animalService;
+        private readonly IAdoptionService adoptionService;
 
-        public CreateModel(ApplicationDbContext context)
+        public CreateModel(IAnimalService animalService, IAdoptionService adoptionService)
         {
-            _context = context;
+            this.animalService = animalService;
+            this.adoptionService = adoptionService;
         }
 
         public Animal Animal { get; set; } = default!;
@@ -50,36 +53,31 @@ namespace AnimalShelter.Pages.Adoptions
 
         public async Task<IActionResult> OnGetAsync(int animalId)
         {
-            var animal = await _context.Animals.FirstOrDefaultAsync(a => a.Id == animalId);
-            if (animal == null) return NotFound();
-
-            // Не позволявай заявка за осиновено животно
-            if (animal.Status == AnimalStatus.Adopted)
-                return RedirectToPage("/Animals/Details", new { id = animalId });
-
-            Animal = animal;
-
-            if (Animal.Status != AnimalStatus.ForAdoption)
-            {
-                TempData["Error"] = "Това животно вече е осиновено и не приема нови заявки.";
-                return RedirectToPage("/Animals/Details", new { id = Animal.Id });
-            }
-
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync(int animalId)
-        {
-            var animal = await _context.Animals.FirstOrDefaultAsync(a => a.Id == animalId);
+            var animal = await animalService.GetByIdAsync(animalId);
             if (animal == null) return NotFound();
 
             if (animal.Status != AnimalStatus.ForAdoption)
             {
                 TempData["Error"] = "Това животно вече е осиновено и не приема нови заявки.";
-                return RedirectToPage("/Animals/Details", new { id = animal.Id });
+                return RedirectToPage("/Animals/Details", new { id = animalId });
             }
 
-            if (!ModelState.IsValid)    
+            Animal = animal;
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(int animalId)
+        {
+            var animal = await animalService.GetByIdAsync(animalId);
+            if (animal == null) return NotFound();
+
+            if (animal.Status != AnimalStatus.ForAdoption)
+            {
+                TempData["Error"] = "Това животно вече е осиновено и не приема нови заявки.";
+                return RedirectToPage("/Animals/Details", new { id = animalId });
+            }
+
+            if (!ModelState.IsValid)
             {
                 Animal = animal;
                 return Page();
@@ -89,33 +87,24 @@ namespace AnimalShelter.Pages.Adoptions
             if (string.IsNullOrWhiteSpace(userId))
                 return Challenge();
 
-            // (по желание) блокирай дублирана заявка от същия потребител за същото животно
-            var alreadyExists = await _context.AdoptionRequests.AnyAsync(r =>
-                r.AnimalId == animalId && r.UserId == userId);
-
-            if (alreadyExists)
+            try
             {
-                ModelState.AddModelError(string.Empty, "Вече имате подадена заявка за това животно.");
+                await adoptionService.CreateRequestAsync(
+                    animalId,
+                    userId,
+                    Input.FullName,
+                    Input.Phone,
+                    Input.Email,
+                    Input.Comment
+                );
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
                 Animal = animal;
                 return Page();
             }
 
-            var request = new AdoptionRequest
-            {
-                AnimalId = animalId,
-                UserId = userId,
-                FullName = Input.FullName,
-                Phone = Input.Phone,
-                Email = Input.Email,
-                Comment = Input.Comment,
-                Status = RequestStatus.New,
-                CreatedOn = DateTime.UtcNow
-            };
-
-            _context.AdoptionRequests.Add(request);
-            await _context.SaveChangesAsync();
-
-            // Пренасочване към "Моите заявки" (ще я направя след малко) 
             return RedirectToPage("/Adoptions/My");
         }
     }

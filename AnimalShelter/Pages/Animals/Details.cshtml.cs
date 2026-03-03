@@ -1,30 +1,29 @@
+using AnimalShelter.Models;
+using AnimalShelter.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using AnimalShelter.Data;
-using AnimalShelter.Models;
+using System.Threading.Tasks;
 
 namespace AnimalShelter.Pages.Animals
 {
     public class DetailsModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAnimalService animalService;
 
-        public DetailsModel(ApplicationDbContext context)
+        public DetailsModel(IAnimalService animalService)
         {
-            _context = context;
+            this.animalService = animalService;
         }
 
-        public Animal Animal { get; set; } = default!;
+        public Animal? Animal { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var animal = await _context.Animals.FirstOrDefaultAsync(a => a.Id == id);
+            Animal = await animalService.GetByIdAsync(id);
 
-            if (animal == null)
+            if (Animal == null)
                 return NotFound();
 
-            Animal = animal;
             return Page();
         }
     }

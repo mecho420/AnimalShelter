@@ -31,5 +31,33 @@ namespace AnimalShelter.Services
             // Връщаме web път (за ImagePath)
             return $"/images/animals/{fileName}";
         }
+
+        public void DeleteAnimalImageIfCustom(string? imagePath)
+        {
+            if (string.IsNullOrWhiteSpace(imagePath))
+                return;
+
+            if (!imagePath.StartsWith("/images/animals/"))
+                return;
+
+            var fileName = Path.GetFileName(imagePath);
+
+            var defaults = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "default-dog.jpg",
+                "default-cat.jpg"
+            };
+
+            if (defaults.Contains(fileName))
+                return;
+
+            var relative = imagePath.TrimStart('/')
+                .Replace("/", Path.DirectorySeparatorChar.ToString());
+
+            var fullPath = Path.Combine(_env.WebRootPath, relative);
+
+            if (File.Exists(fullPath))
+                File.Delete(fullPath);
+        }
     }
 }

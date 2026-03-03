@@ -1,57 +1,52 @@
+using AnimalShelter.Models;
+using AnimalShelter.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using AnimalShelter.Data;
-using AnimalShelter.Models.Enums;
 
 namespace AnimalShelter.Pages.Admin
 {
     [Authorize(Roles = "Admin")]
     public class RequestsModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAdoptionService adoptionService;
 
-        public RequestsModel(ApplicationDbContext context)
+        public RequestsModel(IAdoptionService adoptionService)
         {
-            _context = context;
+            this.adoptionService = adoptionService;
         }
 
-        public List<AnimalShelter.Models.AdoptionRequest> Requests { get; set; } = new();
+        public List<AdoptionRequest> Requests { get; set; } = new();
 
         public async Task OnGetAsync()
         {
-            Requests = await _context.AdoptionRequests
-                .Include(r => r.Animal)
-                .OrderByDescending(r => r.CreatedOn)
-                .ToListAsync();
+            Requests = await adoptionService.GetAllRequestsAsync();
         }
 
         public async Task<IActionResult> OnPostApproveAsync(int id)
         {
-            var req = await _context.AdoptionRequests
-                .Include(r => r.Animal)
-                .FirstOrDefaultAsync(r => r.Id == id);
+            try
+            {
+                await adoptionService.ApproveAsync(id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
 
-            if (req == null) return NotFound();
-
-            req.Status = RequestStatus.Approved;
-
-            // Маркирай животното като осиновено
-            if (req.Animal != null)
-                req.Animal.Status = AnimalStatus.Adopted;
-
-            await _context.SaveChangesAsync();
             return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostRejectAsync(int id)
         {
-            var req = await _context.AdoptionRequests.FirstOrDefaultAsync(r => r.Id == id);
-            if (req == null) return NotFound();
-
-            req.Status = RequestStatus.Rejected;
-            await _context.SaveChangesAsync();
+            try
+            {
+                await adoptionService.RejectAsync(id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
 
             return RedirectToPage();
         }

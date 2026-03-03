@@ -2,6 +2,7 @@ using AnimalShelter.Data;
 using AnimalShelter.Helpers;
 using AnimalShelter.Models;
 using AnimalShelter.Models.Enums;
+using AnimalShelter.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,13 +14,11 @@ namespace AnimalShelter.Pages.Admin.Animals
     [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _env;
+        private readonly IAnimalService animalService;
 
-        public EditModel(ApplicationDbContext context, IWebHostEnvironment env)
+        public EditModel(IAnimalService animalService)
         {
-            _context = context;
-            _env = env;
+            this.animalService = animalService;
         }
 
         [BindProperty]
@@ -35,13 +34,15 @@ namespace AnimalShelter.Pages.Admin.Animals
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var animal = await _context.Animals.FirstOrDefaultAsync(a => a.Id == id);
-            if (animal == null) return NotFound();
+            LoadDropdowns();
+
+            var animal = await animalService.GetByIdAsync(id);
+            if (animal == null)
+                return NotFound();
 
             Animal = animal;
-            CurrentImagePath = string.IsNullOrWhiteSpace(animal.ImagePath) ? CurrentImagePath : animal.ImagePath;
+            CurrentImagePath = string.IsNullOrWhiteSpace(Animal.ImagePath) ? CurrentImagePath : Animal.ImagePath;
 
-            LoadDropdowns();
             return Page();
         }
 
@@ -55,45 +56,18 @@ namespace AnimalShelter.Pages.Admin.Animals
                 return Page();
             }
 
-            var dbAnimal = await _context.Animals.FirstOrDefaultAsync(a => a.Id == Animal.Id);
-            if (dbAnimal == null) return NotFound();
-
-            // Update полетата
-            dbAnimal.Name = Animal.Name;
-            dbAnimal.Species = Animal.Species;
-            dbAnimal.Age = Animal.Age;
-            dbAnimal.Gender = Animal.Gender;
-            dbAnimal.Status = Animal.Status;
-            dbAnimal.Description = Animal.Description;
-            dbAnimal.HealthInfo = Animal.HealthInfo;
-
-            // Ако има нова снимка се качва и сменяме ImagePath
-            if (ImageFile != null && ImageFile.Length > 0)
+            try
             {
-                var ext = Path.GetExtension(ImageFile.FileName).ToLowerInvariant();
-                var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-                if (!allowed.Contains(ext))
-                {
-                    ModelState.AddModelError(string.Empty, "Позволени формати: .jpg, .jpeg, .png, .webp");
-                    CurrentImagePath = string.IsNullOrWhiteSpace(dbAnimal.ImagePath) ? CurrentImagePath : dbAnimal.ImagePath;
-                    return Page();
-                }
-
-                var uploadsFolder = Path.Combine(_env.WebRootPath, "images", "animals");
-                Directory.CreateDirectory(uploadsFolder);
-
-                var fileName = $"{Guid.NewGuid()}{ext}";
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    await ImageFile.CopyToAsync(stream);
-                }
-
-                dbAnimal.ImagePath = $"/images/animals/{fileName}";
+                var ok = await animalService.UpdateAsync(Animal, ImageFile);
+                if (!ok) return NotFound();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                CurrentImagePath = string.IsNullOrWhiteSpace(Animal.ImagePath) ? CurrentImagePath : Animal.ImagePath;
+                return Page();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToPage("/Admin/Animals/Index");
         }
 
