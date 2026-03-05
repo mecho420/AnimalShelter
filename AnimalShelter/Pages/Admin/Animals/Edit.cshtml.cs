@@ -73,6 +73,7 @@ namespace AnimalShelter.Pages.Admin.Animals
 
         private void LoadDropdowns()
         {
+
             GenderOptions = Enum.GetValues(typeof(Gender))
                 .Cast<Gender>()
                 .Select(g => new SelectListItem
