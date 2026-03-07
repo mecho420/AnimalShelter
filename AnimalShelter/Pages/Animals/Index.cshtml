@@ -1,6 +1,7 @@
 ﻿@page
 @model AnimalShelter.Pages.Animals.IndexModel
 @using AnimalShelter.Models.Enums
+@using AnimalShelter.Helpers
 
 @{
 	ViewData["Title"] = "Животни за осиновяване";
@@ -8,15 +9,55 @@
 
 <h1 class="mb-4">Животни за осиновяване</h1>
 
+<form method="get" class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Търсене по име</label>
+                <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Име..." />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Вид</label>
+                <input type="text" name="Species" value="@Model.Species" class="form-control" placeholder="Куче, Котка..." />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Пол</label>
+                <select name="Gender" class="form-select">
+                    <option value="">Всички</option>
+                    <option value="Male" selected="@(Model.Gender == Gender.Male)">Мъжки</option>
+                    <option value="Female" selected="@(Model.Gender == Gender.Female)">Женски</option>
+                    <option value="Unknown" selected="@(Model.Gender == Gender.Unknown)">Неизвестен</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Статус</label>
+                <select name="Status" class="form-select">
+                    <option value="">Всички</option>
+                    <option value="ForAdoption" selected="@(Model.Status == AnimalStatus.ForAdoption)">За осиновяване</option>
+                    <option value="Adopted" selected="@(Model.Status == AnimalStatus.Adopted)">Осиновено</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-primary w-100">Филтрирай</button>
+                <a asp-page="/Animals/Index" class="btn btn-outline-secondary w-100">Изчисти</a>
+            </div>
+        </div>
+    </div>
+</form>
+
 <div class="row">
-    @if (!Model.Animals.Any())
+    @if (!Model.Result.Items.Any())
     {
         <p>В момента няма налични животни.</p>
     }
     else
     {
         <div class="row g-4">
-            @foreach (var animal in Model.Animals)
+            @foreach (var animal in Model.Result.Items)
             {
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="card h-100 animal-card @(animal.Status == AnimalStatus.Adopted ? "opacity-75" : "")">
@@ -61,5 +102,53 @@
                 </div>
             }
         </div>
+    }
+
+    @if (Model.Result.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item @(Model.Result.HasPreviousPage ? "" : "disabled")">
+                    <a class="page-link"
+                       asp-page="/Animals/Index"
+                       asp-route-PageNumber="@(Model.PageNumber - 1)"
+                       asp-route-Species="@Model.Species"
+                       asp-route-Gender="@Model.Gender"
+                       asp-route-Status="@Model.Status"
+                       asp-route-SearchTerm="@Model.SearchTerm">
+                        Предишна
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= Model.Result.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.Result.PageNumber ? "active" : "")">
+                        <a class="page-link"
+                           asp-page="/Animals/Index"
+                           asp-route-PageNumber="@i"
+                           asp-route-Species="@Model.Species"
+                           asp-route-Gender="@Model.Gender"
+                           asp-route-Status="@Model.Status"
+                           asp-route-SearchTerm="@Model.SearchTerm">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.Result.HasNextPage ? "" : "disabled")">
+                    <a class="page-link"
+                       asp-page="/Animals/Index"
+                       asp-route-PageNumber="@(Model.PageNumber + 1)"
+                       asp-route-Species="@Model.Species"
+                       asp-route-Gender="@Model.Gender"
+                       asp-route-Status="@Model.Status"
+                       asp-route-SearchTerm="@Model.SearchTerm">
+                        Следваща
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
     }
 

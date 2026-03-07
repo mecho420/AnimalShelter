@@ -1,4 +1,7 @@
 ﻿using AnimalShelter.Data;
+using AnimalShelter.Common;
+using AnimalShelter.Models.Enums;
+using AnimalShelter.ViewModels;
 using AnimalShelter.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -102,6 +105,52 @@ namespace AnimalShelter.Services
             db.Animals.Remove(animal);
             await db.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<PagedResult<Animal>> GetFilteredAnimalsAsync(AnimalFilterModel filter)
+        {
+            var query = db.Animals.AsNoTracking().AsQueryable();
+
+            // Търсене по име
+            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+            {
+                var term = filter.SearchTerm.Trim().ToLower();
+                query = query.Where(a => a.Name.ToLower().Contains(term));
+            }
+
+            // Филтър по вид
+            if (!string.IsNullOrWhiteSpace(filter.Species))
+            {
+                query = query.Where(a => a.Species == filter.Species);
+            }
+
+            // Филтър по пол
+            if (filter.Gender.HasValue)
+            {
+                query = query.Where(a => a.Gender == filter.Gender.Value);
+            }
+
+            // Филтър по статус
+            if (filter.Status.HasValue)
+            {
+                query = query.Where(a => a.Status == filter.Status.Value);
+            }
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(a => a.Id)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<Animal>
+            {
+                Items = items,
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalItems = totalItems
+            };
         }
     }
 }
