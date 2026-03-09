@@ -23,6 +23,16 @@
             </div>
 
             <div class="col-md-2">
+                <label class="form-label">От възраст</label>
+                <input type="number" name="MinAge" value="@Model.MinAge" class="form-control" min="0" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">До възраст</label>
+                <input type="number" name="MaxAge" value="@Model.MaxAge" class="form-control" min="0" />
+            </div>
+
+            <div class="col-md-2">
                 <label class="form-label">Пол</label>
                 <select name="Gender" class="form-select">
                     <option value="">Всички</option>
@@ -116,7 +126,9 @@
                        asp-route-Species="@Model.Species"
                        asp-route-Gender="@Model.Gender"
                        asp-route-Status="@Model.Status"
-                       asp-route-SearchTerm="@Model.SearchTerm">
+                       asp-route-SearchTerm="@Model.SearchTerm"
+                       asp-route-MinAge="@Model.MinAge"
+                       asp-route-MaxAge="@Model.MaxAge">
                         Предишна
                     </a>
                 </li>
@@ -130,7 +142,9 @@
                            asp-route-Species="@Model.Species"
                            asp-route-Gender="@Model.Gender"
                            asp-route-Status="@Model.Status"
-                           asp-route-SearchTerm="@Model.SearchTerm">
+                           asp-route-SearchTerm="@Model.SearchTerm"
+                           asp-route-MinAge="@Model.MinAge"
+                           asp-route-MaxAge="@Model.MaxAge">
                             @i
                         </a>
                     </li>
@@ -143,7 +157,9 @@
                        asp-route-Species="@Model.Species"
                        asp-route-Gender="@Model.Gender"
                        asp-route-Status="@Model.Status"
-                       asp-route-SearchTerm="@Model.SearchTerm">
+                       asp-route-SearchTerm="@Model.SearchTerm"
+                       asp-route-MinAge="@Model.MinAge"
+                       asp-route-MaxAge="@Model.MaxAge">
                         Следваща
                     </a>
                 </li>

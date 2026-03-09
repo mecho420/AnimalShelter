@@ -136,6 +136,17 @@ namespace AnimalShelter.Services
                 query = query.Where(a => a.Status == filter.Status.Value);
             }
 
+            // Филтър по години (диапазон)
+            if (filter.MinAge.HasValue)
+            {
+                query = query.Where(a => a.Age >= filter.MinAge.Value);
+            }
+
+            if (filter.MaxAge.HasValue)
+            {
+                query = query.Where(a => a.Age <= filter.MaxAge.Value);
+            }
+
             var totalItems = await query.CountAsync();
 
             var items = await query

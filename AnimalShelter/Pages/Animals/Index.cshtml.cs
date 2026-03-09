@@ -36,6 +36,12 @@ namespace AnimalShelter.Pages.Animals
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
 
+        [BindProperty(SupportsGet = true)]
+        public int? MinAge { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int? MaxAge { get; set; }
+
         public async Task OnGetAsync()
         {
             var filter = new AnimalFilterModel
@@ -44,6 +50,8 @@ namespace AnimalShelter.Pages.Animals
                 Gender = Gender,
                 Status = Status,
                 SearchTerm = SearchTerm,
+                MinAge = MinAge,
+                MaxAge = MaxAge,
                 PageNumber = PageNumber,
                 PageSize = 6
             };
