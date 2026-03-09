@@ -44,6 +44,19 @@ namespace AnimalShelter.Pages.Animals
 
         public async Task OnGetAsync()
         {
+            if (MinAge.HasValue && MaxAge.HasValue && MinAge > MaxAge)
+            {
+                ModelState.AddModelError(string.Empty, "Минималната възраст не може да е по-голяма от максималната.");
+                Result = new PagedResult<Animal>
+                {
+                    Items = new List<Animal>(),
+                    PageNumber = PageNumber,
+                    PageSize = 6,
+                    TotalItems = 0
+                };
+                return;
+            }
+
             var filter = new AnimalFilterModel
             {
                 Species = Species,

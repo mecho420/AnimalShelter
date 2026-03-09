@@ -9,30 +9,54 @@
 
 <h1 class="mb-4">Животни за осиновяване</h1>
 
+@if (!ViewData.ModelState.IsValid)
+{
+    <div asp-validation-summary="All" class="alert alert-warning"></div>
+}
+
 <form method="get" class="card shadow-sm mb-4">
     <div class="card-body">
         <div class="row g-3">
-            <div class="col-md-3">
-                <label class="form-label">Търсене по име</label>
-                <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Име..." />
-            </div>
 
             <div class="col-md-3">
+                <label class="form-label">Търсене по име</label>
+                <input type="text"
+                       name="SearchTerm"
+                       value="@Model.SearchTerm"
+                       class="form-control"
+                       placeholder="Име..." />
+            </div>
+
+            <div class="col-md-2">
                 <label class="form-label">Вид</label>
-                <input type="text" name="Species" value="@Model.Species" class="form-control" placeholder="Куче, Котка..." />
+                <input type="text"
+                       name="Species"
+                       value="@Model.Species"
+                       class="form-control"
+                       placeholder="Куче, Котка..." />
             </div>
 
             <div class="col-md-2">
                 <label class="form-label">От възраст</label>
-                <input type="number" name="MinAge" value="@Model.MinAge" class="form-control" min="0" />
+                <input type="number"
+                       name="MinAge"
+                       value="@Model.MinAge"
+                       class="form-control"
+                       min="0"
+                       placeholder="0" />
             </div>
 
             <div class="col-md-2">
                 <label class="form-label">До възраст</label>
-                <input type="number" name="MaxAge" value="@Model.MaxAge" class="form-control" min="0" />
+                <input type="number"
+                       name="MaxAge"
+                       value="@Model.MaxAge"
+                       class="form-control"
+                       min="0"
+                       placeholder="10" />
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <label class="form-label">Пол</label>
                 <select name="Gender" class="form-select">
                     <option value="">Всички</option>
@@ -51,9 +75,9 @@
                 </select>
             </div>
 
-            <div class="col-md-2 d-flex align-items-end gap-2">
-                <button type="submit" class="btn btn-primary w-100">Филтрирай</button>
-                <a asp-page="/Animals/Index" class="btn btn-outline-secondary w-100">Изчисти</a>
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Филтрирай</button>
+                <a asp-page="/Animals/Index" class="btn btn-outline-secondary">Изчисти</a>
             </div>
         </div>
     </div>
