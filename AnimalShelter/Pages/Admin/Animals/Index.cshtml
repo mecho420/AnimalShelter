@@ -1,5 +1,6 @@
 ﻿@page
 @model AnimalShelter.Pages.Admin.Animals.IndexModel
+@using AnimalShelter.Models.Enums
 @using AnimalShelter.Helpers
 
 @{
@@ -18,7 +19,38 @@
     <a class="btn btn-primary" asp-page="/Admin/Animals/Create">+ Добави животно</a>
 </div>
 
-@if (!Model.Animals.Any())
+<form method="get" class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <label class="form-label">Търсене по име</label>
+                <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Вид</label>
+                <input type="text" name="Species" value="@Model.Species" class="form-control" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Статус</label>
+                <select name="Status" class="form-select">
+                    <option value="">Всички</option>
+                    <option value="ForAdoption" selected="@(Model.Status == AnimalStatus.ForAdoption)">За осиновяване</option>
+                    <option value="Adopted" selected="@(Model.Status == AnimalStatus.Adopted)">Осиновено</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-primary w-100">Филтрирай</button>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@if (Model.Result.Items.Any())
 {
     <div class="alert alert-info">Няма добавени животни.</div>
 }
@@ -37,7 +69,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var a in Model.Animals)
+            @foreach (var a in Model.Result.Items)
             {
                 var img = string.IsNullOrWhiteSpace(a.ImagePath) ? "/images/animals/default-dog.jpg" : a.ImagePath;
                 <tr>

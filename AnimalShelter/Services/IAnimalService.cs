@@ -16,5 +16,6 @@ namespace AnimalShelter.Services
         Task<Animal?> GetByIdAsync(int id);
         Task<bool> DeleteAsync(int id);
         Task<PagedResult<Animal>> GetFilteredAnimalsAsync(AnimalFilterModel filter);
+        Task<PagedResult<Animal>> GetAdminAnimalsAsync(AnimalFilterModel filter);
     }
 }

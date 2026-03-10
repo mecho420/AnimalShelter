@@ -163,5 +163,42 @@ namespace AnimalShelter.Services
                 TotalItems = totalItems
             };
         }
+
+        public async Task<PagedResult<Animal>> GetAdminAnimalsAsync(AnimalFilterModel filter)
+        {
+            var query = db.Animals.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+            {
+                var term = filter.SearchTerm.Trim().ToLower();
+                query = query.Where(a => a.Name.ToLower().Contains(term));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Species))
+            {
+                query = query.Where(a => a.Species == filter.Species);
+            }
+
+            if (filter.Status.HasValue)
+            {
+                query = query.Where(a => a.Status == filter.Status.Value);
+            }
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(a => a.Id)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToListAsync();
+
+            return new PagedResult<Animal>
+            {
+                Items = items,
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TotalItems = totalItems
+            };
+        }
     }
 }

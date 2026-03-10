@@ -1,10 +1,11 @@
+using AnimalShelter.Common;
 using AnimalShelter.Models;
+using AnimalShelter.Models.Enums;
 using AnimalShelter.Services;
+using AnimalShelter.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace AnimalShelter.Pages.Admin.Animals
 {
@@ -18,11 +19,32 @@ namespace AnimalShelter.Pages.Admin.Animals
             this.animalService = animalService;
         }
 
-        public List<Animal> Animals { get; set; } = new();
+        public PagedResult<Animal> Result { get; set; } = new();
+
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string? Species { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public AnimalStatus? Status { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int PageNumber { get; set; } = 1;
 
         public async Task OnGetAsync()
         {
-            Animals = await animalService.GetAdminAnimalsAsync();
+            var filter = new AnimalFilterModel
+            {
+                SearchTerm = SearchTerm,
+                Species = Species,
+                Status = Status,
+                PageNumber = PageNumber,
+                PageSize = 10
+            };
+
+            Result = await animalService.GetAdminAnimalsAsync(filter);
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
