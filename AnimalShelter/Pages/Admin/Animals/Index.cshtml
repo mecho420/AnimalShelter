@@ -144,3 +144,48 @@ else
     </script>
     }
 }
+
+@if (Model.Result.TotalPages > 1)
+{
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(Model.Result.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link"
+                   asp-page="./Index"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)"
+                   asp-route-SearchTerm="@Model.SearchTerm"
+                   asp-route-Species="@Model.Species"
+                   asp-route-Status="@Model.Status">
+                    Предишна
+                </a>
+            </li>
+
+            @for (int i = 1; i <= Model.Result.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Result.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                       asp-page="./Index"
+                       asp-route-PageNumber="@i"
+                       asp-route-SearchTerm="@Model.SearchTerm"
+                       asp-route-Species="@Model.Species"
+                       asp-route-Status="@Model.Status">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(Model.Result.HasNextPage ? "" : "disabled")">
+                <a class="page-link"
+                   asp-page="./Index"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)"
+                   asp-route-SearchTerm="@Model.SearchTerm"
+                   asp-route-Species="@Model.Species"
+                   asp-route-Status="@Model.Status">
+                    Следваща
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+}
