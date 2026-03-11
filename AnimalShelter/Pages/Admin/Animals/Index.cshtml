@@ -50,7 +50,7 @@
     </div>
 </form>
 
-@if (Model.Result.Items.Any())
+@if (Model.Result == null || !Model.Result.Items.Any())
 {
     <div class="alert alert-info">Няма добавени животни.</div>
 }
