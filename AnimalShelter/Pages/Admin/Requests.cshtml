@@ -32,6 +32,7 @@ else
                 <th>Имейл</th>
                 <th>Дата</th>
                 <th>Статус</th>
+                <th>Коментар</th>
                 <th style="width:220px;">Действия</th>
             </tr>
         </thead>
@@ -66,8 +67,78 @@ else
                             <span class="text-muted">Няма действия</span>
                         }
                     </td>
+
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(r.Comment))
+                        {
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-info"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#commentModal"
+                                    data-comment="@r.Comment"
+                                    data-animal="@r.Animal?.Name"
+                                    data-user="@r.FullName">
+                                Виж
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-sm btn-outline-secondary" disabled>
+                                Няма
+                            </button>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Коментар към заявката</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <strong>Животно:</strong> <span id="commentAnimal"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>Кандидат:</strong> <span id="commentUser"></span>
+                    </div>
+
+                    <hr />
+
+                    <div id="commentText" style="white-space: pre-wrap;"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Затвори</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    <script>
+        const commentModal = document.getElementById('commentModal');
+
+        if (commentModal) {
+            commentModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+
+                const comment = button.getAttribute('data-comment');
+                const animal = button.getAttribute('data-animal');
+                const user = button.getAttribute('data-user');
+
+                document.getElementById('commentText').textContent = comment ?? '';
+                document.getElementById('commentAnimal').textContent = animal ?? '';
+                document.getElementById('commentUser').textContent = user ?? '';
+            });
+        }
+    </script>
+    }
 }
