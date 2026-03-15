@@ -1,10 +1,125 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Начало";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="home-hero">
+    <div class="home-hero-overlay">
+        <div class="container text-center text-white">
+            <h1 class="display-4 fw-bold">Подай лапа на живота</h1>
+            <p class="lead mt-3">
+                Ние свързваме спасени животни с хора, които могат да им дадат любов, сигурност и истински дом.
+            </p>
+            <div class="mt-4">
+                <a asp-page="/Animals/Index" class="btn btn-light btn-lg me-2">Виж животните</a>
+                <a href="#mission" class="btn btn-outline-light btn-lg">Научи повече</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="mission" class="py-5">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6">
+                <img src="~/images/home/gallery1.jpg" class="img-fluid rounded shadow" alt="Спасено животно" />
+            </div>
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-3">Нашата мисия</h2>
+                <p class="fs-5 text-muted">
+                    Нашата мисия е да помагаме на изоставени, ранени и бездомни животни, като им осигурим безопасност,
+                    грижа и шанс за нов живот.
+                </p>
+                <p class="text-muted">
+                    Вярваме, че всяко животно заслужава дом, внимание и обич. Чрез нашата система улесняваме процеса
+                    на осиновяване и помагаме на бъдещите стопани да намерят своя нов приятел.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Какво правим</h2>
+            <p class="text-muted">Сайтът подпомага връзката между приюта и бъдещите осиновители.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 feature-card">
+                    <div class="card-body text-center p-4">
+                        <h4 class="fw-bold mb-3">Спасяваме</h4>
+                        <p class="text-muted mb-0">
+                            Даваме шанс на животни в риск да получат грижа, лечение и временен подслон.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 feature-card">
+                    <div class="card-body text-center p-4">
+                        <h4 class="fw-bold mb-3">Грижим се</h4>
+                        <p class="text-muted mb-0">
+                            Поддържаме информация за здравословното състояние, нуждите и характера на всяко животно.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 feature-card">
+                    <div class="card-body text-center p-4">
+                        <h4 class="fw-bold mb-3">Намираме домове</h4>
+                        <p class="text-muted mb-0">
+                            Свързваме животните с хора, които искат да осиновят и да им дадат безопасен и обичащ дом.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Истории, които чакат своя дом</h2>
+            <p class="text-muted">Тук можеш да добавяш още снимки и да разширяваш галерията, когато пожелаеш.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <img src="~/images/home/gallery2.jpg" class="img-fluid rounded shadow gallery-img" alt="Животно 1" />
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <img src="~/images/home/gallery3.jpg" class="img-fluid rounded shadow gallery-img" alt="Животно 2" />
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <img src="~/images/home/gallery4.jpg" class="img-fluid rounded shadow gallery-img" alt="Животно 3" />
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <img src="~/images/home/gallery5.jpg" class="img-fluid rounded shadow gallery-img" alt="Животно 4" />
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <img src="~/images/home/gallery1.jpg" class="img-fluid rounded shadow gallery-img" alt="Животно 5" />
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <img src="~/images/home/hero.jpg" class="img-fluid rounded shadow gallery-img" alt="Животно 6" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 text-white home-cta">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Подари шанс за нов живот</h2>
+        <p class="lead mb-4">
+            Разгледай животните, научи повече за тях и помогни едно спасено същество да намери своя дом.
+        </p>
+        <a asp-page="/Animals/Index" class="btn btn-light btn-lg">Разгледай животните за осиновяване</a>
+    </div>
+</section>
