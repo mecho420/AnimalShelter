@@ -20,13 +20,22 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
                     <!-- ЛЯВО МЕНЮ -->
+
+                    <!-- за посетители -->
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-page="/Index">Home</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-page="/Animals/Index">Животни</a>
+                        </li>
+
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Animals/Index">Животни</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-page="/Adoptions/My">Моите заявки</a>
                             </li>
