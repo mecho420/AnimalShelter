@@ -201,3 +201,86 @@ footer.footer {
     background: none;
     padding: 0.5rem 0.85rem !important;
 }
+
+.filters-panel {
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    background: #ffffff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+    .filters-panel .form-label {
+        font-weight: 600;
+        color: #374151;
+    }
+
+.animal-card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #ffffff;
+}
+
+    .animal-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    }
+
+.animal-img {
+    height: 240px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.animal-card .card-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.animal-meta {
+    color: #4b5563;
+    font-size: 1rem;
+}
+
+    .animal-meta strong {
+        color: #111827;
+    }
+
+.custom-badge {
+    display: inline-block;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.badge-adoption {
+    background-color: #d8f3dc;
+    color: #1b4332;
+}
+
+.badge-adopted {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.pagination .page-link {
+    color: #2d6a4f;
+    border-radius: 0.5rem !important;
+    margin: 0 0.2rem;
+    border: 1px solid #d1d5db;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #588157;
+    border-color: #588157;
+    color: white;
+}
+
+.pagination .page-link:hover {
+    background-color: #edf6ee;
+    color: #1b4332;
+}
