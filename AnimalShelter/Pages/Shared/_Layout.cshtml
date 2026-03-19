@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light sticky-top mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">AnimalShelter</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -24,7 +24,7 @@
                     <!-- за посетители -->
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark" asp-page="/Index">Начало</a>
                         </li>
 
                         <li class="nav-item">
@@ -44,13 +44,9 @@
                                 <a class="nav-link text-dark" asp-page="/Admin/Requests">Заявки</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Admin/Animals/Index">Животни</a>
+                                <a class="nav-link text-dark" asp-page="/Admin/Animals/Index">Панел</a>
                             </li>
                         }
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-page="/Privacy">Privacy</a>
-                        </li>
                     </ul>
 
                     <!-- ДЯСНО МЕНЮ (LOGIN / REGISTER / LOGOUT) -->
@@ -69,8 +65,8 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - AnimalShelter - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        <div class="container text-center">
+            &copy; 2026 - AnimalShelter - Всеки живот заслужава дом
         </div>
     </footer>
 
