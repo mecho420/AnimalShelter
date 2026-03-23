@@ -1,10 +1,18 @@
 ﻿@page
 @model AnimalShelter.Pages.Admin.RequestsModel
 @using AnimalShelter.Helpers
+@using AnimalShelter.Models.Enums
 
 @{
-    ViewData["Title"] = "Заявки за осиновяване (Admin)";
+    ViewData["Title"] = "Заявки";
 }
+
+<div class="mb-4 text-center">
+    <h1 class="fw-bold">Заявки за осиновяване</h1>
+    <p class="text-muted fs-5">
+        Прегледай всички подадени заявки, виж коментарите и обработвай кандидатурите.
+    </p>
+</div>
 
 @if (TempData["Error"] != null)
 {
@@ -13,87 +21,115 @@
     </div>
 }
 
-<h1 class="mb-4">Заявки за осиновяване</h1>
-
-<a class="btn btn-primary mb-3" asp-page="/Admin/Animals/Create">+ Добави животно</a>
-
 @if (!Model.Requests.Any())
 {
-    <p>Няма подадени заявки.</p>
+    <div class="empty-state-box">
+        <h3 class="mb-3">Няма подадени заявки</h3>
+        <p>Когато потребителите започнат да кандидатстват за осиновяване, заявките ще се появят тук.</p>
+    </div>
 }
 else
 {
-    <table class="table table-striped align-middle">
-        <thead>
-            <tr>
-                <th>Животно</th>
-                <th>Кандидат</th>
-                <th>Телефон</th>
-                <th>Имейл</th>
-                <th>Дата</th>
-                <th>Статус</th>
-                <th>Коментар</th>
-                <th style="width:220px;">Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var r in Model.Requests)
-            {
-                <tr>
-                    <td>
-                        <strong>@r.Animal?.Name</strong><br />
-                        <a asp-page="/Animals/Details" asp-route-id="@r.AnimalId">Детайли</a>
-                    </td>
-                    <td>@r.FullName</td>
-                    <td>@r.Phone</td>
-                    <td>@r.Email</td>
-                    <td>@r.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@r.Status.GetDisplayName()</td>
-                    <td>
-                        @if (r.Status == AnimalShelter.Models.Enums.RequestStatus.New)
+    <div class="admin-requests-wrapper">
+        <div class="table-responsive">
+            <table class="table admin-requests-table align-middle">
+                <thead>
+                    <tr>
+                        <th>Животно</th>
+                        <th>Кандидат</th>
+                        <th>Телефон</th>
+                        <th>Имейл</th>
+                        <th>Дата</th>
+                        <th>Коментар</th>
+                        <th>Статус</th>
+                        <th class="text-end">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model.Requests)
+                    {
+                        var statusClass = r.Status switch
                         {
-                            <form method="post" asp-page-handler="Approve" class="d-inline">
-                                <input type="hidden" name="id" value="@r.Id" />
-                                <button type="submit" class="btn btn-success btn-sm">Одобри</button>
-                            </form>
+                            RequestStatus.New => "status-pill status-new",
+                            RequestStatus.Approved => "status-pill status-approved",
+                            RequestStatus.Rejected => "status-pill status-rejected",
+                            _ => "status-pill status-new"
+                        };
 
-                            <form method="post" asp-page-handler="Reject" class="d-inline ms-2">
-                                <input type="hidden" name="id" value="@r.Id" />
-                                <button type="submit" class="btn btn-danger btn-sm">Откажи</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <span class="text-muted">Няма действия</span>
-                        }
-                    </td>
+                        <tr>
+                            <td>
+                                <div class="admin-request-animal">@r.Animal?.Name</div>
+                                <div class="admin-request-meta">@r.Animal?.Species</div>
+                            </td>
 
-                    <td>
-                        @if (!string.IsNullOrWhiteSpace(r.Comment))
-                        {
-                            <button type="button"
-                                    class="btn btn-sm btn-outline-info"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#commentModal"
-                                    data-comment="@r.Comment"
-                                    data-animal="@r.Animal?.Name"
-                                    data-user="@r.FullName">
-                                Виж
-                            </button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-sm btn-outline-secondary" disabled>
-                                Няма
-                            </button>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                            <td>@r.FullName</td>
+                            <td>@r.Phone</td>
+                            <td>@r.Email</td>
 
-    <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
+                            <td>
+                                <div class="admin-request-meta">
+                                    @r.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                </div>
+                            </td>
+
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(r.Comment))
+                                {
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-info"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#commentModal"
+                                            data-comment="@r.Comment"
+                                            data-animal="@r.Animal?.Name"
+                                            data-user="@r.FullName">
+                                        Виж
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" disabled>
+                                        Няма
+                                    </button>
+                                }
+                            </td>
+
+                            <td>
+                                <span class="@statusClass">
+                                    @r.Status.GetDisplayName()
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="admin-action-buttons">
+                                    @if (r.Status == RequestStatus.New)
+                                    {
+                                        <form method="post" asp-page-handler="Approve" class="d-inline">
+                                            <input type="hidden" name="id" value="@r.Id" />
+                                            <button type="submit" class="btn btn-success btn-sm">Одобри</button>
+                                        </form>
+
+                                        <form method="post" asp-page-handler="Reject" class="d-inline">
+                                            <input type="hidden" name="id" value="@r.Id" />
+                                            <button type="submit" class="btn btn-danger btn-sm">Откажи</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Няма действия</span>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    // Comment modal
+
+    <div class="modal fade comment-modal" id="commentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -102,16 +138,19 @@ else
                 </div>
 
                 <div class="modal-body">
-                    <div class="mb-2">
-                        <strong>Животно:</strong> <span id="commentAnimal"></span>
+                    <div class="mb-3">
+                        <div class="comment-modal-label">Животно</div>
+                        <div class="comment-modal-value" id="commentAnimal"></div>
                     </div>
 
-                    <div class="mb-2">
-                        <strong>Кандидат:</strong> <span id="commentUser"></span>
+                    <div class="mb-3">
+                        <div class="comment-modal-label">Кандидат</div>
+                        <div class="comment-modal-value" id="commentUser"></div>
                     </div>
 
                     <hr />
 
+                    <div class="comment-modal-label">Коментар</div>
                     <div id="commentText" style="white-space: pre-wrap;"></div>
                 </div>
 
@@ -121,6 +160,7 @@ else
             </div>
         </div>
     </div>
+}
 
     @section Scripts {
     <script>
@@ -141,4 +181,3 @@ else
         }
     </script>
     }
-}
