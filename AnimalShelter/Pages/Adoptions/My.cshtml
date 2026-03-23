@@ -1,42 +1,81 @@
 ﻿@page
 @model AnimalShelter.Pages.Adoptions.MyModel
 @using AnimalShelter.Helpers
+@using AnimalShelter.Models.Enums
 
 @{
     ViewData["Title"] = "Моите заявки";
 }
 
-<h1 class="mb-4">Моите заявки</h1>
+<div class="mb-4 text-center">
+    <h1 class="fw-bold">Моите заявки</h1>
+    <p class="text-muted fs-5">
+        Тук можеш да следиш всички подадени от теб заявки за осиновяване и техния текущ статус.
+    </p>
+</div>
 
 @if (!Model.Requests.Any())
 {
-    <p>Все още нямате подадени заявки.</p>
+    <div class="empty-state-box">
+        <h3 class="mb-3">Все още нямаш подадени заявки</h3>
+        <p>
+            Разгледай животните в приюта и подай заявка за осиновяване, когато откриеш своя бъдещ приятел.
+        </p>
+        <a asp-page="/Animals/Index" class="btn btn-primary">Разгледай животните</a>
+    </div>
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Животно</th>
-                <th>Дата</th>
-                <th>Статус</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var r in Model.Requests)
-            {
-                <tr>
-                    <td>@r.Animal?.Name</td>
-                    <td>@r.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@r.Status.GetDisplayName()</td>
-                    <td>
-                        <a asp-page="/Animals/Details" asp-route-id="@r.AnimalId" class="btn btn-sm btn-outline-primary">
-                            Детайли
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="requests-wrapper">
+        <div class="table-responsive">
+            <table class="table requests-table align-middle">
+                <thead>
+                    <tr>
+                        <th>Животно</th>
+                        <th>Дата</th>
+                        <th>Статус</th>
+                        <th class="text-end">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model.Requests)
+                    {
+                        var statusClass = r.Status switch
+                        {
+                            RequestStatus.New => "status-pill status-new",
+                            RequestStatus.Approved => "status-pill status-approved",
+                            RequestStatus.Rejected => "status-pill status-rejected",
+                            _ => "status-pill status-new"
+                        };
+
+                        <tr>
+                            <td>
+                                <div class="request-animal-name">@r.Animal?.Name</div>
+                            </td>
+
+                            <td>
+                                <div class="request-date">
+                                    @r.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="@statusClass">
+                                    @r.Status.GetDisplayName()
+                                </span>
+                            </td>
+
+                            <td class="text-end">
+                                <a asp-page="/Animals/Details"
+                                   asp-route-id="@r.AnimalId"
+                                   class="btn btn-outline-primary btn-sm">
+                                    Детайли
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
