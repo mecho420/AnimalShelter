@@ -21,7 +21,45 @@
     </div>
 }
 
-@if (!Model.Requests.Any())
+<form method="get" class="filters-panel p-4 mb-4">
+    <div class="row g-3 align-items-end">
+
+        <div class="col-md-4">
+            <label class="form-label">Търсене по кандидат</label>
+            <input type="text"
+                   name="SearchTerm"
+                   value="@Model.SearchTerm"
+                   class="form-control"
+                   placeholder="Име на кандидат..." />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Животно</label>
+            <input type="text"
+                   name="AnimalName"
+                   value="@Model.AnimalName"
+                   class="form-control"
+                   placeholder="Име на животно..." />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Статус</label>
+            <select name="Status" class="form-select">
+                <option value="">Всички</option>
+                <option value="New" selected="@(Model.Status == RequestStatus.New)">Нов</option>
+                <option value="Approved" selected="@(Model.Status == RequestStatus.Approved)">Одобрено</option>
+                <option value="Rejected" selected="@(Model.Status == RequestStatus.Rejected)">Отказано</option>
+            </select>
+        </div>
+
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">Филтрирай</button>
+            <a asp-page="/Admin/Requests" class="btn btn-outline-secondary w-100">Изчисти</a>
+        </div>
+    </div>
+</form>
+
+@if (Model.Result == null || !Model.Result.Items.Any())
 {
     <div class="empty-state-box">
         <h3 class="mb-3">Няма подадени заявки</h3>
@@ -46,7 +84,7 @@ else
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var r in Model.Requests)
+                    @foreach (var r in Model.Result.Items)
                     {
                         var statusClass = r.Status switch
                         {
@@ -160,6 +198,51 @@ else
             </div>
         </div>
     </div>
+}
+
+@if (Model.Result.TotalPages > 1)
+{
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item @(Model.Result.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link"
+                   asp-page="/Admin/Requests"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)"
+                   asp-route-SearchTerm="@Model.SearchTerm"
+                   asp-route-AnimalName="@Model.AnimalName"
+                   asp-route-Status="@Model.Status">
+                    Предишна
+                </a>
+            </li>
+
+            @for (int i = 1; i <= Model.Result.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Result.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                       asp-page="/Admin/Requests"
+                       asp-route-PageNumber="@i"
+                       asp-route-SearchTerm="@Model.SearchTerm"
+                       asp-route-AnimalName="@Model.AnimalName"
+                       asp-route-Status="@Model.Status">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(Model.Result.HasNextPage ? "" : "disabled")">
+                <a class="page-link"
+                   asp-page="/Admin/Requests"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)"
+                   asp-route-SearchTerm="@Model.SearchTerm"
+                   asp-route-AnimalName="@Model.AnimalName"
+                   asp-route-Status="@Model.Status">
+                    Следваща
+                </a>
+            </li>
+
+        </ul>
+    </nav>
 }
 
     @section Scripts {

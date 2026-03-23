@@ -2,6 +2,7 @@
 using AnimalShelter.Models;
 using AnimalShelter.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using AnimalShelter.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -149,5 +150,46 @@ namespace AnimalShelter.Services
             await db.SaveChangesAsync();
             return true;
         }
+
+        public async Task<PagedResult<AdoptionRequest>> GetFilteredRequestsAsync(string? searchTerm, string? animalName, RequestStatus? status, int pageNumber, int pageSize)
+        {
+
+        var query = db.AdoptionRequests
+            .Include(r => r.Animal)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var term = searchTerm.Trim().ToLower();
+            query = query.Where(r => r.FullName.ToLower().Contains(term));
+        }
+
+        if (!string.IsNullOrWhiteSpace(animalName))
+        {
+            var animal = animalName.Trim().ToLower();
+            query = query.Where(r => r.Animal != null && r.Animal.Name.ToLower().Contains(animal));
+        }
+
+        if (status.HasValue)
+        {
+            query = query.Where(r => r.Status == status.Value);
+        }
+
+        var totalItems = await query.CountAsync();
+
+        var items = await query
+            .OrderByDescending(r => r.CreatedOn)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return new PagedResult<AdoptionRequest>
+        {
+            Items = items,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalItems = totalItems
+        };
     }
+}
 }

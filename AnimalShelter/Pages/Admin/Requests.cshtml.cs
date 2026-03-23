@@ -3,6 +3,8 @@ using AnimalShelter.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using AnimalShelter.Common;
+using AnimalShelter.Models.Enums;
 
 namespace AnimalShelter.Pages.Admin
 {
@@ -16,11 +18,28 @@ namespace AnimalShelter.Pages.Admin
             this.adoptionService = adoptionService;
         }
 
-        public List<AdoptionRequest> Requests { get; set; } = new();
+        public PagedResult<AdoptionRequest> Result { get; set; } = new();
+
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string? AnimalName { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public RequestStatus? Status { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int PageNumber { get; set; } = 1;
 
         public async Task OnGetAsync()
         {
-            Requests = await adoptionService.GetAllRequestsAsync();
+            Result = await adoptionService.GetFilteredRequestsAsync(
+                SearchTerm,
+                AnimalName,
+                Status,
+                PageNumber,
+                5);
         }
 
         public async Task<IActionResult> OnPostApproveAsync(int id)
@@ -34,7 +53,13 @@ namespace AnimalShelter.Pages.Admin
                 TempData["Error"] = ex.Message;
             }
 
-            return RedirectToPage();
+            return RedirectToPage(new
+            {
+                SearchTerm,
+                AnimalName,
+                Status,
+                PageNumber
+            });
         }
 
         public async Task<IActionResult> OnPostRejectAsync(int id)
@@ -48,7 +73,13 @@ namespace AnimalShelter.Pages.Admin
                 TempData["Error"] = ex.Message;
             }
 
-            return RedirectToPage();
+            return RedirectToPage(new
+            {
+                SearchTerm,
+                AnimalName,
+                Status,
+                PageNumber
+            });
         }
     }
 }

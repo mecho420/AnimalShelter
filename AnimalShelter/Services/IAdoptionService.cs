@@ -2,6 +2,9 @@
 using AnimalShelter.Models.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AnimalShelter.Common;
+using AnimalShelter.Models;
+using AnimalShelter.Models.Enums;
 
 namespace AnimalShelter.Services
 {
@@ -18,5 +21,7 @@ namespace AnimalShelter.Services
 
         // за страницата Create (зареждане на животното + проверки)
         Task<Animal?> GetAnimalForAdoptionRequestAsync(int animalId);
+
+        Task<PagedResult<AdoptionRequest>> GetFilteredRequestsAsync(string? searchTerm, string? animalName, RequestStatus? status, int pageNumber, int pageSize);
     }
 }
