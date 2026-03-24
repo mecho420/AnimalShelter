@@ -836,3 +836,115 @@ section p {
         font-size: 1rem;
     }
 }
+
+
+
+/* Login/Register */
+.auth-page {
+    min-height: calc(100vh - 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+}
+
+.auth-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1.5rem;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.auth-left {
+    background: linear-gradient(135deg, #3a5a40, #588157);
+    color: white;
+    height: 100%;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+    .auth-left h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+
+    .auth-left p {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 0;
+    }
+
+.auth-right {
+    padding: 2.5rem;
+    background: #ffffff;
+}
+
+.auth-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    color: #6b7280;
+    margin-bottom: 1.75rem;
+}
+
+.auth-right .form-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.auth-right .form-control {
+    border-radius: 0.85rem;
+    padding: 0.8rem 0.95rem;
+}
+
+    .auth-right .form-control:focus {
+        border-color: #588157;
+        box-shadow: 0 0 0 0.2rem rgba(88, 129, 87, 0.15);
+    }
+
+.auth-right .btn-primary {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 0.9rem;
+    font-weight: 700;
+}
+
+.auth-link {
+    color: #588157;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .auth-link:hover {
+        color: #3a5a40;
+        text-decoration: underline;
+    }
+
+.auth-helper-text {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-top: 1rem;
+}
+
+@media (max-width: 991.98px) {
+    .auth-left {
+        padding: 2rem;
+    }
+
+    .auth-right {
+        padding: 2rem;
+    }
+
+    .auth-title {
+        font-size: 1.75rem;
+    }
+}
