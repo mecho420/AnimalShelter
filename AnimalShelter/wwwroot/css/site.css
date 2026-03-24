@@ -651,3 +651,121 @@ footer.footer {
     .admin-top-actions .btn {
         white-space: nowrap;
     }
+
+
+/* footer */
+:root {
+    --brand-green: #588157;
+    --brand-green-dark: #3a5a40;
+    --brand-green-light: #d8f3dc;
+    --brand-bg: #f8f9fa;
+    --brand-text: #1f2937;
+    --brand-muted: #6b7280;
+    --brand-white: #ffffff;
+}
+
+body {
+    background-color: var(--brand-bg);
+    color: var(--brand-text);
+}
+
+.site-footer {
+    background: linear-gradient(135deg, #3a5a40, #588157);
+    color: #ffffff;
+    margin-top: 4rem;
+}
+
+.footer-brand {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.footer-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-text {
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.8;
+    margin-bottom: 0;
+}
+
+.footer-links {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+    .footer-links li {
+        margin-bottom: 0.65rem;
+    }
+
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.88);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+        .footer-links a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+.footer-divider {
+    border-color: rgba(255, 255, 255, 0.2);
+    margin: 2rem 0 1.5rem 0;
+}
+
+.footer-bottom {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+}
+
+
+
+/* navbar */
+.brand-paw {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+
+
+/* icons */
+.feature-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background-color: #edf6ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    box-shadow: 0 6px 16px rgba(88, 129, 87, 0.12);
+}
+
+
+
+
+/* buttons and sections */
+section h2 {
+    color: #1f2937;
+}
+
+section p {
+    line-height: 1.8;
+}
+
+.btn {
+    border-radius: 0.8rem;
+    padding: 0.65rem 1.1rem;
+    font-weight: 600;
+}
+
+.card {
+    border-radius: 1rem;
+}

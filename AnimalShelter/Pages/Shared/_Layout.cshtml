@@ -12,7 +12,10 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light sticky-top mb-3">
             <div class="container">
-                <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index">AnimalShelter</a>
+                <a class="navbar-brand fw-bold d-flex align-items-center gap-2" asp-area="" asp-page="/Index">
+                    <span class="brand-paw">🐾</span>
+                    <span>AnimalShelter</span>
+                </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                         aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,9 +87,41 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center">
-            &copy; 2026 - AnimalShelter - Всеки живот заслужава дом
+    <footer class="site-footer mt-5">
+        <div class="container py-5">
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <h4 class="footer-brand">AnimalShelter</h4>
+                    <p class="footer-text">
+                        Сайт, посветен на спасяването на животни и намирането на сигурен, обичащ дом за всяко от тях.
+                    </p>
+                </div>
+
+                <div class="col-md-4">
+                    <h5 class="footer-title">Навигация</h5>
+                    <ul class="footer-links">
+                        <li><a asp-page="/Index">Начало</a></li>
+                        <li><a asp-page="/Animals/Index">Животни</a></li>
+                        <li><a asp-page="/Adoptions/My">Моите заявки</a></li>
+                        <li><a asp-page="/Privacy">Privacy</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4">
+                    <h5 class="footer-title">Мисия</h5>
+                    <p class="footer-text">
+                        Вярваме, че всяко животно заслужава шанс за нов живот, грижа и дом, изпълнен с любов.
+                    </p>
+                </div>
+
+            </div>
+
+            <hr class="footer-divider" />
+
+            <div class="text-center footer-bottom">
+                &copy; 2026 - AnimalShelter - Всеки живот заслужава дом
+            </div>
         </div>
     </footer>
 
