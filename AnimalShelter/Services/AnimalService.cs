@@ -150,10 +150,11 @@ namespace AnimalShelter.Services
             var totalItems = await query.CountAsync();
 
             var items = await query
-                .OrderByDescending(a => a.Id)
-                .Skip((filter.PageNumber - 1) * filter.PageSize)
-                .Take(filter.PageSize)
-                .ToListAsync();
+                 .OrderBy(a => a.Status == AnimalStatus.Adopted)
+                 .ThenByDescending(a => a.Id)
+                 .Skip((filter.PageNumber - 1) * filter.PageSize)
+                 .Take(filter.PageSize)
+                 .ToListAsync();
 
             return new PagedResult<Animal>
             {
