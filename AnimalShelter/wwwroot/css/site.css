@@ -1096,3 +1096,39 @@ section p {
     line-height: 1.9;
     margin-bottom: 0;
 }
+
+
+/* Profile */
+.nav-profile-link {
+    font-weight: 600;
+    color: #374151 !important;
+}
+
+    .nav-profile-link:hover {
+        color: #588157 !important;
+    }
+
+.profile-dropdown {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.9rem;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    min-width: 220px;
+}
+
+    .profile-dropdown .dropdown-item {
+        border-radius: 0.7rem;
+        padding: 0.65rem 0.9rem;
+        font-weight: 500;
+        color: #374151;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+        .profile-dropdown .dropdown-item:hover {
+            background-color: #edf6ee;
+            color: #1b4332;
+        }
+
+    .profile-dropdown .dropdown-divider {
+        margin: 0.5rem 0;
+    }

@@ -96,14 +96,27 @@ namespace AnimalShelter.Services
             var animal = await db.Animals.FirstOrDefaultAsync(a => a.Id == id);
             if (animal == null) return false;
 
-            var hasRequests = await db.AdoptionRequests.AnyAsync(r => r.AnimalId == id);
-            if (hasRequests)
+            var relatedRequests = await db.AdoptionRequests
+                .Where(r => r.AnimalId == id)
+                .ToListAsync();
+
+            // Ако животното все още е за осиновяване и има заявки, не го трием
+            if (animal.Status == AnimalStatus.ForAdoption && relatedRequests.Any())
+            {
                 throw new InvalidOperationException("Не може да се изтрие животно, за което има подадени заявки.");
+            }
+
+            // Ако животното е осиновено, позволяваме изтриване и премахваме старите заявки
+            if (animal.Status == AnimalStatus.Adopted && relatedRequests.Any())
+            {
+                db.AdoptionRequests.RemoveRange(relatedRequests);
+            }
 
             imageService.DeleteAnimalImageIfCustom(animal.ImagePath);
 
             db.Animals.Remove(animal);
             await db.SaveChangesAsync();
+
             return true;
         }
 
