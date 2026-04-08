@@ -101,11 +101,20 @@
 
                     @if (Model.Animal.Status == AnimalStatus.ForAdoption)
                     {
-                        <a class="btn btn-success"
-                           asp-page="/Adoptions/Create"
-                           asp-route-animalId="@Model.Animal.Id">
-                            Подай заявка за осиновяване
-                        </a>
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-success"
+                               asp-page="/Adoptions/Create"
+                               asp-route-animalId="@Model.Animal.Id">
+                                Подай заявка за осиновяване
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-outline-secondary" disabled>
+                                Admin не може да подава заявки
+                            </button>
+                        }
                     }
                     else
                     {

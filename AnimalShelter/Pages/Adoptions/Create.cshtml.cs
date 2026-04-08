@@ -53,6 +53,11 @@ namespace AnimalShelter.Pages.Adoptions
 
         public async Task<IActionResult> OnGetAsync(int animalId)
         {
+            if (User.IsInRole("Admin"))
+            {
+                TempData["Error"] = "Администратор не може да подава заявки за осиновяване.";
+                return RedirectToPage("/Animals/Details", new { id = animalId });
+            }
             var animal = await animalService.GetByIdAsync(animalId);
             if (animal == null) return NotFound();
 
@@ -68,6 +73,11 @@ namespace AnimalShelter.Pages.Adoptions
 
         public async Task<IActionResult> OnPostAsync(int animalId)
         {
+            if (User.IsInRole("Admin"))
+            {
+                TempData["Error"] = "Администратор не може да подава заявки за осиновяване.";
+                return RedirectToPage("/Animals/Details", new { id = animalId });
+            }
             var animal = await animalService.GetByIdAsync(animalId);
             if (animal == null) return NotFound();
 

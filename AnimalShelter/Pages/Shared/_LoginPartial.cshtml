@@ -34,12 +34,16 @@
                 </a>
             </li>
 
-            <li>
-                <a class="dropdown-item"
-                   asp-page="/Adoptions/My">
-                    Моите заявки
-                </a>
-            </li>
+            @if (!User.IsInRole("Admin"))
+
+            {
+                <li>
+                    <a class="dropdown-item"
+                       asp-page="/Adoptions/My">
+                        Моите заявки
+                    </a>
+                </li>
+            }
 
             @if (User.IsInRole("Admin"))
 

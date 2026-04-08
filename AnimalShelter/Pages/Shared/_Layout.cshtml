@@ -44,7 +44,7 @@
                             </a>
                         </li>
 
-                        @if (User.Identity?.IsAuthenticated ?? false)
+                        @if ((User.Identity?.IsAuthenticated ?? false) && !User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.StartsWith("/Adoptions/My") == true ? "active" : "")"
@@ -71,12 +71,15 @@
                             </li>
                         }
 
-                        <li class="nav-item">
-                            <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Privacy" ? "active" : "")"
-                               asp-page="/Privacy">
-                                Поверителност <span style='font-size:20px;'>&#128274;</span>
-                            </a>
-                        </li>
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Privacy" ? "active" : "")"
+                                   asp-page="/Privacy">
+                                    Поверителност <span style='font-size:20px;'>&#128274;</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                     <ul class="navbar-nav align-items-lg-center">

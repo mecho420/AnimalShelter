@@ -12,8 +12,14 @@ namespace AnimalShelter.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToPage("/Index");
+            }
+
+            return Page();
         }
     }
 
