@@ -118,7 +118,7 @@ else
                                     <a class="btn btn-outline-primary btn-sm"
                                        asp-page="/Admin/Animals/Edit"
                                        asp-route-id="@a.Id">
-                                        Редакция
+                                        Редакция <span style='font-size:15px;'>✏️</span>
                                     </a>
 
                                     <button type="button"
@@ -127,7 +127,7 @@ else
                                             data-bs-target="#deleteModal"
                                             data-animal-id="@a.Id"
                                             data-animal-name="@a.Name">
-                                        Изтрий
+                                        Изтрий <span style='font-size:15px;'>❌</span>
                                     </button>
                                 </div>
                             </td>

@@ -33,14 +33,14 @@
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "active" : "")"
                                asp-page="/Index">
-                                Начало
+                                Начало <span style='font-size:20px;'>&#127968;</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.StartsWith("/Animals") == true ? "active" : "")"
                                asp-page="/Animals/Index">
-                                Животни
+                                Животни <span style='font-size:20px;'>&#128054;</span>
                             </a>
                         </li>
 
@@ -49,7 +49,7 @@
                             <li class="nav-item">
                                 <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.StartsWith("/Adoptions/My") == true ? "active" : "")"
                                    asp-page="/Adoptions/My">
-                                    Моите заявки
+                                    Моите заявки <span style='font-size:20px;'>&#128221;</span>
                                 </a>
                             </li>
                         }
@@ -59,14 +59,14 @@
                             <li class="nav-item">
                                 <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Admin/Requests" ? "active" : "")"
                                    asp-page="/Admin/Requests">
-                                    Заявки
+                                    Заявки <span style='font-size:20px;'>📩</span>
                                 </a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString()?.StartsWith("/Admin/Animals") == true ? "active" : "")"
                                    asp-page="/Admin/Animals/Index">
-                                    Животни Admin
+                                    Животни Admin <span style='font-size:20px;'>🐱</span>
                                 </a>
                             </li>
                         }
@@ -74,7 +74,7 @@
                         <li class="nav-item">
                             <a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Privacy" ? "active" : "")"
                                asp-page="/Privacy">
-                                Поверителност
+                                Поверителност <span style='font-size:20px;'>&#128274;</span>
                             </a>
                         </li>
                     </ul>

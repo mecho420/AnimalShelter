@@ -7,7 +7,7 @@ namespace AnimalShelter.Models.Enums
         [Display(Name = "Нов")]
         New = 0,
 
-        [Display(Name = "Удобрено")]
+        [Display(Name = "Oдобрено")]
         Approved = 1,
 
         [Display(Name = "Отказано")]
