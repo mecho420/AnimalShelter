@@ -24,7 +24,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = false;
 })
 .AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<ApplicationDbContext>();
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddErrorDescriber<BulgarianIdentityErrorDescriber>();
 
 builder.Services.AddScoped<AnimalShelter.Services.IImageService, AnimalShelter.Services.ImageService>();
 
