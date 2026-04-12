@@ -1132,3 +1132,26 @@ section p {
     .profile-dropdown .dropdown-divider {
         margin: 0.5rem 0;
     }
+
+
+
+/* Logo */
+.navbar-brand-logo {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin-right: 1.25rem;
+}
+
+.navbar-logo-large {
+    height: 56px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-logo-large {
+        height: 46px;
+    }
+}
