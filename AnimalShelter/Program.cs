@@ -32,7 +32,8 @@ builder.Services.AddScoped<AnimalShelter.Services.IImageService, AnimalShelter.S
 
 var app = builder.Build();
 
-await DbInitializer.SeedAsync(app.Services); //Seed za DbInitializer
+await DbInitializer.SeedAsync(app.Services); // Seed for DbInitializer
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -50,6 +51,12 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await DbInitializer.SeedAsync(services);
+}
 
 app.Run();
 
