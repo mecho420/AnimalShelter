@@ -1155,3 +1155,143 @@ section p {
         height: 46px;
     }
 }
+
+
+
+/* Managing account pages */
+.manage-page {
+    padding: 2rem 0 3rem 0;
+}
+
+.manage-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.manage-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.manage-subtitle {
+    color: #6b7280;
+    font-size: 1.05rem;
+}
+
+.manage-wrapper {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1.5rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.manage-sidebar {
+    background: linear-gradient(180deg, #f8fafc, #ffffff);
+    border-right: 1px solid #e5e7eb;
+    height: 100%;
+    padding: 1.5rem 1rem;
+}
+
+.manage-content {
+    padding: 2rem;
+}
+
+.manage-card-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.manage-card-subtitle {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+.manage-panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    padding: 1.5rem;
+}
+
+    .manage-panel .form-label {
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .manage-panel .form-control,
+    .manage-panel .form-select {
+        border-radius: 0.85rem;
+        padding: 0.8rem 0.95rem;
+    }
+
+        .manage-panel .form-control:focus,
+        .manage-panel .form-select:focus {
+            border-color: #588157;
+            box-shadow: 0 0 0 0.2rem rgba(88, 129, 87, 0.15);
+        }
+
+.manage-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.manage-note {
+    background: #edf6ee;
+    border: 1px solid #d8f3dc;
+    color: #1b4332;
+    border-radius: 0.9rem;
+    padding: 1rem 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+}
+
+.manage-warning {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    border-radius: 0.9rem;
+    padding: 1rem 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+}
+
+.manage-sidebar .nav-pills .nav-link {
+    color: #374151;
+    font-weight: 600;
+    border-radius: 0.85rem;
+    margin-bottom: 0.4rem;
+    padding: 0.8rem 1rem;
+    transition: all 0.2s ease;
+}
+
+    .manage-sidebar .nav-pills .nav-link:hover {
+        background-color: #edf6ee;
+        color: #1b4332;
+    }
+
+    .manage-sidebar .nav-pills .nav-link.active {
+        background-color: #588157;
+        color: #ffffff;
+    }
+
+@media (max-width: 991.98px) {
+    .manage-sidebar {
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .manage-content {
+        padding: 1.5rem;
+    }
+
+    .manage-title {
+        font-size: 2rem;
+    }
+}

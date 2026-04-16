@@ -60,12 +60,12 @@ namespace AnimalShelter.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Моля, въведи имейл.")]
+            [EmailAddress(ErrorMessage = "Моля, въведи валиден имейл адрес.")]
             [Display(Name = "Имейл")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Моля, въведи парола.")]
             [DataType(DataType.Password)]
             [Display(Name = "Парола")]
             public string Password { get; set; }

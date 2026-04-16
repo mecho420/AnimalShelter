@@ -1,0 +1,62 @@
+﻿@page
+@model EmailModel
+@{
+    ViewData["Title"] = "Имейл";
+    ViewData["ActivePage"] = ManageNavPages.Email;
+}
+
+<div class="manage-panel">
+    <h2 class="manage-card-title">Имейл</h2>
+    <p class="manage-card-subtitle">
+        Управлявай текущия имейл адрес, използван за вход и комуникация.
+    </p>
+
+    <partial name="_StatusMessage" for="StatusMessage" />
+
+    <div class="manage-note">
+        Увери се, че използваш валиден имейл адрес, до който имаш достъп.
+    </div>
+
+    <form id="email-form" method="post">
+
+        @if (Model.IsEmailConfirmed)
+        {
+            <div class="mb-3">
+                <label class="form-label">Текущ имейл</label>
+                <div class="input-group">
+                    <input value="@Model.Email" class="form-control" disabled />
+                    <span class="input-group-text text-success">Потвърден</span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="mb-3">
+                <label class="form-label">Текущ имейл</label>
+                <input value="@Model.Email" class="form-control" disabled />
+            </div>
+
+            <div class="mb-3">
+                <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-outline-secondary">
+                    Изпрати имейл за потвърждение
+                </button>
+            </div>
+        }
+
+        <div class="mb-3">
+            <label asp-for="Input.NewEmail" class="form-label">Нов имейл</label>
+            <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" />
+            <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+        </div>
+
+        <div class="manage-actions">
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary">
+                Смени имейла
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

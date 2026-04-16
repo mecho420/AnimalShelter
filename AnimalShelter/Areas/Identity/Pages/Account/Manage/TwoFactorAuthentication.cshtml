@@ -1,0 +1,51 @@
+﻿@page
+@model TwoFactorAuthenticationModel
+@{
+    ViewData["Title"] = "Двуфакторна автентикация";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<div class="manage-panel">
+    <h2 class="manage-card-title">Двуфакторна автентикация</h2>
+    <p class="manage-card-subtitle">
+        Управлявай допълнителната защита на своя акаунт.
+    </p>
+
+    <partial name="_StatusMessage" for="StatusMessage" />
+
+    <div class="manage-note">
+        Двуфакторната автентикация добавя още едно ниво на сигурност към твоя профил.
+    </div>
+
+    @if (Model.Is2faEnabled)
+    {
+        <div class="manage-warning">
+            Двуфакторната автентикация е активирана за този акаунт.
+        </div>
+    }
+    else
+    {
+        <div class="manage-warning">
+            Двуфакторната автентикация не е активирана.
+        </div>
+    }
+
+    <div class="manage-actions">
+        @if (!Model.HasAuthenticator)
+        {
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">
+                Настрой authenticator приложение
+            </a>
+        }
+        else
+        {
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">
+                Настрой authenticator приложение
+            </a>
+
+            <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-outline-secondary">
+                Нулирай authenticator
+            </a>
+        }
+    </div>
+</div>

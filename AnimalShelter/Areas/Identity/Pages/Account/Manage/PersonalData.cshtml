@@ -1,0 +1,28 @@
+﻿@page
+@model PersonalDataModel
+@{
+    ViewData["Title"] = "Лични данни";
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+<div class="manage-panel">
+    <h2 class="manage-card-title">Лични данни</h2>
+    <p class="manage-card-subtitle">
+        Прегледай и управлявай личните данни, свързани с твоя акаунт.
+    </p>
+
+    <div class="manage-warning">
+        Тази страница позволява да изтеглиш или изтриеш личните данни, свързани с профила ти.
+        Изтриването на акаунта е необратимо действие.
+    </div>
+
+    <div class="manage-actions">
+        <a id="download-data" asp-page="DownloadPersonalData" class="btn btn-outline-primary">
+            Изтегли личните данни
+        </a>
+
+        <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">
+            Изтрий акаунта
+        </a>
+    </div>
+</div>
